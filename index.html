@@ -1,4 +1,4 @@
-ز<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -437,7 +437,7 @@
   <div class="dashboard-header">
     <div class="title-section">
       <h1>📍 مدير الأعلاف الذكي</h1>
-      <p>حساب الأكياس + الكيلو فارط • بدون حفظ تلقائي (جلسة مؤقتة)</p>
+      <p>حساب الشكاير  + الكيلو فارط • بدون حفظ تلقائي (جلسة مؤقتة)</p>
     </div>
     <div class="action-buttons">
       <button class="btn-primary" id="addProductBtn">➕ إضافة منتج جديد</button>
@@ -462,14 +462,14 @@
   </div>
 
   <div id="productsContainer" class="products-grid"></div>
-  <footer>✓ بدون حفظ تلقائي • أدخل عدد الأكياس والكيلو الفارط • تحسب الاجمالي وعدد الأكياس العشري تلقائياً</footer>
+  <footer>✓ بدون حفظ تلقائي • أدخل عدد الشكاير  والكيلو الفارط • تحسب الاجمالي وعدد الشكاير  العشري تلقائياً</footer>
 </div>
 
 <div id="productModal" class="modal">
   <div class="modal-content">
     <h3 id="modalTitle">إضافة منتج جديد</h3>
     <input type="text" id="productNameInput" placeholder="اسم العلف (مثال: حبوب تسمين)" autocomplete="off">
-    <input type="text" id="productWeightInput" placeholder="وزن الكيس (كجم)" value="50" autocomplete="off">
+    <input type="text" id="productWeightInput" placeholder="وزن الشكاره (كجم)" value="50" autocomplete="off">
     <div class="modal-buttons">
       <button id="modalSaveBtn" class="save-modal">💾 حفظ</button>
       <button id="modalCancelBtn" class="btn-secondary">إلغاء</button>
@@ -549,9 +549,9 @@
         const decimalBags = bagWeight > 0 ? totalKg / bagWeight : 0;
         const decimalFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
         
-        message += `🔸 *${p.name}* (${bagWeight} كجم/كيس)\n`;
-        message += `   📦 أكياس: ${bags}  |  ⚖️ كيلو فارط: ${loose} كجم\n`;
-        message += `   📈 الإجمالي: ${Math.round(totalKg * 10) / 10} كجم  |  🛍️ أكياس عشرية: ${decimalFormatted}\n`;
+        message += `🔸 *${p.name}* (${bagWeight} كجم/شكاره)\n`;
+        message += `   📦 شكاير: ${bags}  |  ⚖️ كيلو فارط: ${loose} كجم\n`;
+        message += `   📈 الإجمالي: ${Math.round(totalKg * 10) / 10} كجم  |  🛍️ شكاير عشرية: ${decimalFormatted}\n`;
         message += `━━━━━━━━━━━━━━━━━━━━\n`;
       });
     }
@@ -565,7 +565,7 @@
       if(p.bagWeight > 0) totalAllDecimalBags += totalKg / p.bagWeight;
     });
     message += `📌 *المجموع الكلي:* ${Math.round(totalAllKg * 10) / 10} كجم\n`;
-    message += `📌 *إجمالي الأكياس العشرية:* ${(totalAllDecimalBags % 1 === 0) ? totalAllDecimalBags.toFixed(0) : totalAllDecimalBags.toFixed(2)} كيس\n`;
+    message += `📌 *إجمالي الشكاير  العشرية:* ${(totalAllDecimalBags % 1 === 0) ? totalAllDecimalBags.toFixed(0) : totalAllDecimalBags.toFixed(2)} شكاره\n`;
     message += `\n✅ تم الإرسال عبر تطبيق FeedMaster Pro`;
     
     return encodeURIComponent(message);
@@ -608,7 +608,7 @@
     const decimalBagsSpan = card.querySelector('.result-decimal-bags');
     
     if (totalKgSpan) totalKgSpan.textContent = `${Math.round(totalKg * 10) / 10} كجم`;
-    if (decimalBagsSpan) decimalBagsSpan.textContent = `${decimalBagsFormatted} كيس`;
+    if (decimalBagsSpan) decimalBagsSpan.textContent = `${decimalBagsFormatted} شكاره`;
   }
 
   // تحديث كمية المنتج
@@ -668,7 +668,7 @@
       return;
     }
     if (isNaN(weight) || weight <= 0) {
-      alert("وزن الكيس يجب أن يكون رقماً موجباً");
+      alert("وزن الشكاره يجب أن يكون رقماً موجباً");
       return;
     }
     
@@ -749,10 +749,10 @@
         <div class="product-card" data-product-id="${product.id}">
           <div class="card-header">
             <span class="product-name">${escapeHtml(product.name)}</span>
-            <span class="bag-weight-badge">⚖️ الكيس: ${bagWeight} كجم</span>
+            <span class="bag-weight-badge">⚖️ الشكاره: ${bagWeight} كجم</span>
           </div>
           <div class="input-group">
-            <label>📦 عدد الأكياس</label>
+            <label>📦 عدد الشكاير </label>
             <input type="text" inputmode="decimal" value="${bags}" class="number-input bags-input" data-id="${product.id}" data-field="bags" placeholder="0" autocomplete="off">
           </div>
           <div class="input-group">
@@ -765,8 +765,8 @@
               <span class="result-value result-total-kg">${Math.round(totalKg * 10) / 10} كجم</span>
             </div>
             <div class="result-item">
-              <span class="result-label">🛍️ أكياس عشرية</span>
-              <span class="result-value decimal-bags result-decimal-bags">${decimalBagsFormatted} كيس</span>
+              <span class="result-label">🛍️ شكاير عشرية</span>
+              <span class="result-value decimal-bags result-decimal-bags">${decimalBagsFormatted} شكاره</span>
             </div>
           </div>
           <div class="card-actions">
@@ -862,4 +862,4 @@
   });
 </script>
 </body>
-</html>
+  </html>
