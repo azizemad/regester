@@ -85,6 +85,25 @@
     .btn-secondary:hover {
       background: #2f3542;
     }
+    /* زر الواتس اب مميز */
+    .btn-whatsapp {
+      background: #075e54;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .btn-whatsapp:hover {
+      background: #128C7E;
+      transform: scale(0.97);
+    }
 
     .search-bar {
       margin-bottom: 2rem;
@@ -103,6 +122,45 @@
     .search-input:focus {
       border-color: #ff7a2f;
       box-shadow: 0 0 0 2px rgba(255, 122, 47, 0.2);
+    }
+
+    /* حاوية الفرع وارسال */
+    .branch-send-section {
+      background: #13161e;
+      border-radius: 32px;
+      padding: 0.8rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      border: 1px solid #282e38;
+    }
+    .branch-input-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #0c0f15;
+      padding: 5px 20px;
+      border-radius: 60px;
+    }
+    .branch-input-group label {
+      font-weight: 500;
+      color: #ffa05e;
+    }
+    #branchNameInput {
+      background: transparent;
+      border: none;
+      padding: 12px 0;
+      font-size: 1rem;
+      color: white;
+      outline: none;
+      width: 180px;
+    }
+    #branchNameInput::placeholder {
+      color: #5f6c7a;
     }
 
     .products-grid {
@@ -361,6 +419,15 @@
     </div>
   </div>
 
+  <!-- قسم الفرع وإرسال الواتساب -->
+  <div class="branch-send-section">
+    <div class="branch-input-group">
+      <label>🏢 الفرع:</label>
+      <input type="text" id="branchNameInput" placeholder="مثال: فرع المنصورة" autocomplete="off">
+    </div>
+    <button class="btn-whatsapp" id="sendWhatsAppBtn">📲 إرسال التقرير إلى الواتساب</button>
+  </div>
+
   <div class="search-bar">
     <input type="text" id="searchInput" class="search-input" placeholder="🔍 بحث باسم العلف أو الوزن ...">
   </div>
@@ -382,7 +449,7 @@
 </div>
 
 <script>
-  // Default Products
+  // Default Products (نفس البيانات مع ضمان وجود id فريد)
   const DEFAULT_PRODUCTS = [
     { id: 'p1', name: 'بادي', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p2', name: 'نامي', bagWeight: 50, bags: 0, looseKg: 0 },
@@ -411,7 +478,11 @@
     { id: 'p25', name: 'ناهي صغير', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p26', name: 'بياض صغير', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p27', name: 'دشيشه صغير', bagWeight: 25, bags: 0, looseKg: 0 },
-    { id: 'p28', name: 'دشيشه', bagWeight: 25, bags: 0, looseKg: 0 }
+    { id: 'p28', name: 'دشيشه', bagWeight: 50, bags: 0, looseKg: 0 }, 
+    { id: 'p29', name: 'بادي نامي ', bagWeight: 10, bags: 0, looseKg: 0 }, 
+  { id: 'p30', name: 'صويا', bagWeight: 50, bags: 0, looseKg: 0 }, 
+  { id: 'p31', name: 'شعير', bagWeight: 50, bags: 0, looseKg: 0 }
+    
   ];
 
   let products = [];
@@ -436,11 +507,66 @@
     saveToLocalStorage();
   }
 
-  function saveToLocalStorage() {
-    localStorage.setItem('feed_manager_products', JSON.stringify(products));
+  
+
+  // دالة إنشاء نص التقرير للواتساب
+  function generateWhatsAppMessage() {
+    let branchName = document.getElementById('branchNameInput').value.trim();
+    if (branchName === "") branchName = "فرع غير محدد";
+    
+    const now = new Date();
+    const dateStr = `${now.toLocaleDateString('ar-EG')} ${now.toLocaleTimeString('ar-EG')}`;
+    
+    let message = `📊 *تقرير الأعلاف اليومي* 📊\n`;
+    message += `🏢 *الفرع:* ${branchName}\n`;
+    message += `🕒 *التاريخ والوقت:* ${dateStr}\n`;
+    message += `━━━━━━━━━━━━━━━━━━━━\n`;
+    
+    // تصفية المنتجات التي لها كميات فقط
+    const nonZeroProducts = products.filter(p => (p.bags && p.bags > 0) || (p.looseKg && p.looseKg > 0));
+    
+    if (nonZeroProducts.length === 0) {
+      message += `⚠️ لا توجد كميات مسجلة اليوم.\n`;
+    } else {
+      nonZeroProducts.forEach(p => {
+        const bagWeight = p.bagWeight;
+        const bags = p.bags || 0;
+        const loose = p.looseKg || 0;
+        const totalKg = (bags * bagWeight) + loose;
+        const decimalBags = bagWeight > 0 ? totalKg / bagWeight : 0;
+        const decimalFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
+        
+        message += `🔸 *${p.name}* (${bagWeight} كجم/كيس)\n`;
+        message += `   📦 أكياس: ${bags}  |  ⚖️ كيلو فارط: ${loose} كجم\n`;
+        message += `   📈 الإجمالي: ${Math.round(totalKg * 10) / 10} كجم  |  🛍️ أكياس عشرية: ${decimalFormatted}\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━\n`;
+      });
+    }
+    
+    // إضافة إجمالي عام لكل الكميات
+    let totalAllKg = 0;
+    let totalAllDecimalBags = 0;
+    products.forEach(p => {
+      const totalKg = ((p.bags || 0) * p.bagWeight) + (p.looseKg || 0);
+      totalAllKg += totalKg;
+      if(p.bagWeight > 0) totalAllDecimalBags += totalKg / p.bagWeight;
+    });
+    message += `📌 *المجموع الكلي:* ${Math.round(totalAllKg * 10) / 10} كجم\n`;
+    message += `📌 *إجمالي الأكياس العشرية:* ${(totalAllDecimalBags % 1 === 0) ? totalAllDecimalBags.toFixed(0) : totalAllDecimalBags.toFixed(2)} كيس\n`;
+    message += `\n✅ تم الإرسال عبر تطبيق FeedMaster Pro`;
+    
+    return encodeURIComponent(message);
   }
 
-  // تحديث قيمة معينة دون إعادة رسم كامل
+  // وظيفة إرسال الواتساب
+  function sendWhatsAppReport() {
+    const phoneNumber = "+201015913800"; // رقم المستلم
+    const message = generateWhatsAppMessage();
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  }
+
+  // باقي دوال التطبيق
   function updateSingleProductUI(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -455,7 +581,6 @@
     const decimalBags = bagWeight > 0 ? totalKg / bagWeight : 0;
     const decimalBagsFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
     
-    // تحديث حقول الإدخال (مع الحفاظ على التركيز)
     const bagsInput = card.querySelector('.bags-input');
     const looseInput = card.querySelector('.loose-input');
     
@@ -466,7 +591,6 @@
       looseInput.value = looseKg;
     }
     
-    // تحديث النتائج
     const totalKgSpan = card.querySelector('.result-total-kg');
     const decimalBagsSpan = card.querySelector('.result-decimal-bags');
     
@@ -488,9 +612,7 @@
       product.looseKg = num;
     }
     
-    saveToLocalStorage();
-    updateSingleProductUI(productId);
-  }
+
 
   let currentEditProductId = null;
 
@@ -519,7 +641,7 @@
     }
     products = products.filter(p => p.id !== productId);
     saveToLocalStorage();
-    renderProducts(); // إعادة رسم كامل فقط عند الحذف
+    renderProducts();
   }
 
   function saveProductFromModal() {
@@ -573,16 +695,12 @@
     renderProducts();
   }
 
-  // معالج الأرقام مع دعم العربية
   function handleNumericInput(e, productId, field) {
     let rawValue = e.target.value;
-    // تحويل الأرقام العربية إلى إنجليزية
     let converted = rawValue.replace(/[٠-٩]/g, function(d) {
       return String.fromCharCode(d.charCodeAt(0) - 1632);
     });
-    // السماح فقط بالأرقام والنقطة
     let filtered = converted.replace(/[^0-9.]/g, '');
-    // التأكد من وجود نقطة واحدة فقط
     let parts = filtered.split('.');
     if (parts.length > 2) {
       filtered = parts[0] + '.' + parts.slice(1).join('');
@@ -648,7 +766,6 @@
       `;
     }).join('');
     
-    // إضافة المستمعات للأحداث
     document.querySelectorAll('.bags-input').forEach(input => {
       const productId = input.getAttribute('data-id');
       input.removeEventListener('input', window[`handler_${productId}_bags`]);
@@ -726,6 +843,10 @@
     document.getElementById('modalSaveBtn').addEventListener('click', saveProductFromModal);
     document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
     document.getElementById('searchInput').addEventListener('input', () => renderProducts());
+    
+    // ربط زر الواتساب
+    document.getElementById('sendWhatsAppBtn').addEventListener('click', sendWhatsAppReport);
+    
     window.addEventListener('click', (e) => {
       if (e.target === document.getElementById('productModal')) closeModal();
     });
