@@ -1,592 +1,742 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>عزيز عماد | المستقبل الرقمي</title>
-    <!-- Font Awesome 6 (مجاني) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts (عربية حديثة) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Animate.css للإضافات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>تطبيق إدارة الأعلاف اليومي | Feed Manager Pro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Tahoma', 'Cairo', sans-serif;
+    }
 
-        body {
-            background: #05070a;
-            color: #e0e0e0;
-            overflow-x: hidden;
-            cursor: none;
-        }
+    body {
+      background-color: #0a0c10;
+      color: #eef2ff;
+      padding: 1rem;
+      transition: all 0.2s ease;
+    }
 
-        /* الشريط المتقدم */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0f1a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0ff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #0ff;
-        }
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-        /* المؤشر التفاعلي */
-        .cursor-glow {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid cyan;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            transition: 0.1s ease;
-            background: rgba(0, 255, 255, 0.1);
-            box-shadow: 0 0 15px cyan;
-            backdrop-filter: blur(2px);
-        }
+    .dashboard-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      gap: 15px;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #2a2e3a;
+    }
+    .title-section h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff9f4a, #ff7a2f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+    .title-section p {
+      color: #9ca3af;
+      font-size: 0.85rem;
+      margin-top: 5px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-primary {
+      background: #ff7a2f;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #0a0c10;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(255, 122, 47, 0.2);
+    }
+    .btn-primary:hover {
+      background: #ff9330;
+      transform: scale(0.97);
+      box-shadow: 0 2px 6px rgba(255, 122, 47, 0.3);
+    }
+    .btn-secondary {
+      background: #252a34;
+      border: 1px solid #3f4656;
+      color: #e2e8f0;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-secondary:hover {
+      background: #2f3542;
+    }
 
-        /* شريط التحميل */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 1s ease;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .loader h2 {
-            color: cyan;
-            text-shadow: 0 0 20px cyan;
-            letter-spacing: 3px;
-        }
-        .loader .progress-bar {
-            width: 300px;
-            height: 4px;
-            background: #222;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .loader .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: cyan;
-            box-shadow: 0 0 10px cyan;
-            transition: width 0.3s ease;
-        }
+    .search-bar {
+      margin-bottom: 2rem;
+    }
+    .search-input {
+      width: 100%;
+      background: #14181f;
+      border: 1px solid #2c313c;
+      border-radius: 60px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      color: #f1f5f9;
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-input:focus {
+      border-color: #ff7a2f;
+      box-shadow: 0 0 0 2px rgba(255, 122, 47, 0.2);
+    }
 
-        /* خلفية الجسيمات */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
-        }
-        /* تأثير matrix خفيف */
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,255,255,0.02) 0px, rgba(0,0,0,0.1) 2px, transparent 3px);
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.3;
-        }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
 
-        /* تقدم القراءة */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: transparent;
-            z-index: 1000;
-        }
-        .progress-bar-read {
-            height: 4px;
-            background: linear-gradient(90deg, cyan, #a020f0);
-            width: 0%;
-            box-shadow: 0 0 12px cyan;
-        }
+    .product-card {
+      background: #13161e;
+      border-radius: 32px;
+      border: 1px solid #282e38;
+      padding: 1.3rem 1.5rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.4);
+    }
+    .product-card:hover {
+      border-color: #ff7a2f50;
+      transform: translateY(-3px);
+    }
 
-        /* تصميم عام */
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed #2a2e3a;
+      padding-bottom: 0.5rem;
+    }
+    .product-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #fff, #ffb47b);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .bag-weight-badge {
+      background: #1e293b;
+      padding: 5px 12px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #ffa05e;
+      border-left: 2px solid #ff7a2f;
+    }
 
-        section {
-            margin: 100px 0;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        section.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .input-group {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .input-group label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #b9c3d4;
+      letter-spacing: 0.3px;
+    }
+    .number-input {
+      background: #0c0f15;
+      border: 1px solid #2b313d;
+      border-radius: 28px;
+      padding: 14px 18px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #facc15;
+      width: 100%;
+      outline: none;
+      transition: 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .number-input:focus {
+      border-color: #ff7a2f;
+      box-shadow: 0 0 0 2px rgba(255, 122, 47, 0.3);
+    }
 
-        h2 {
-            font-size: 3rem;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, cyan, #b300ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-            border-right: 4px solid cyan;
-            padding-right: 15px;
-            text-shadow: 0 0 5px rgba(0,255,255,0.3);
-        }
+    .results {
+      background: #0b0e14;
+      border-radius: 28px;
+      padding: 16px;
+      margin: 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .result-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .result-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #7e8a98;
+    }
+    .result-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffb347;
+      line-height: 1.2;
+    }
+    .decimal-bags {
+      color: #4ade80;
+    }
 
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-        }
-        .hero-content {
-            z-index: 2;
-        }
-        .avatar {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid cyan;
-            box-shadow: 0 0 30px cyan;
-            transition: 0.5s;
-        }
-        .avatar .glow-ring {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: calc(100% + 20px);
-            height: calc(100% + 20px);
-            border-radius: 50%;
-            border: 2px dashed cyan;
-            animation: spin 8s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg);}
-            100% { transform: rotate(360deg);}
-        }
-        .hero h1 {
-            font-size: 4rem;
-            background: linear-gradient(45deg, #ffffff, cyan, #b300ff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(0,255,255,0.5);
-        }
-        .typed-text {
-            font-size: 1.8rem;
-            margin: 20px 0;
-            color: #ccf;
-        }
-        .hero-desc {
-            max-width: 700px;
-            margin: 20px auto;
-            font-size: 1.2rem;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 40px;
-            border: 1px solid rgba(0,255,255,0.3);
-        }
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #9aa3b5;
+      transition: 0.2s;
+      padding: 8px 12px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .icon-btn.edit-btn {
+      color: #60a5fa;
+    }
+    .icon-btn.edit-btn:hover {
+      background: #1e2a3e;
+      color: #93c5fd;
+    }
+    .icon-btn.delete-btn {
+      color: #f87171;
+    }
+    .icon-btn.delete-btn:hover {
+      background: #2c1a1f;
+      color: #ff8a8a;
+    }
 
-        /* كروت زجاجية */
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-        .glass-card {
-            background: rgba(15, 20, 35, 0.6);
-            backdrop-filter: blur(12px);
-            border-radius: 25px;
-            padding: 25px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            transition: 0.4s;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-        .glass-card:hover {
-            transform: translateY(-10px);
-            border-color: cyan;
-            box-shadow: 0 0 30px rgba(0,255,255,0.2);
-        }
-        .glass-card i {
-            font-size: 2.2rem;
-            color: cyan;
-            margin-bottom: 15px;
-        }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #171c24;
+      border-radius: 48px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 450px;
+      border: 1px solid #ff7a2f55;
+    }
+    .modal-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .modal input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      background: #0f1219;
+      border: 1px solid #2f3643;
+      border-radius: 40px;
+      color: white;
+      font-size: 1rem;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .save-modal {
+      background: #ff7a2f;
+      border: none;
+      padding: 12px;
+      border-radius: 60px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        /* مهارات skill bar متطورة */
-        .skill-item {
-            margin: 20px 0;
-        }
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .skill-bar-bg {
-            height: 10px;
-            background: #222;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        .skill-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, cyan, #a020f0);
-            border-radius: 10px;
-            transition: width 1.2s ease-out;
-            box-shadow: 0 0 8px cyan;
-        }
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: #0a0c10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.7s ease;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .splash.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .splash-logo {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff9f4a, #ff5e1a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
 
-        /* مشاريع */
-        .project-card {
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(0, 255, 255, 0.4);
-            transition: all 0.4s;
-        }
-        .project-card:hover {
-            transform: scale(1.02);
-            border-color: cyan;
-            box-shadow: 0 0 25px cyan;
-        }
-        .project-card .icon {
-            font-size: 3rem;
-            color: cyan;
-        }
-        .neon-btn {
-            background: none;
-            border: 1px solid cyan;
-            color: cyan;
-            padding: 8px 18px;
-            border-radius: 40px;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .neon-btn:hover {
-            background: cyan;
-            color: #000;
-            box-shadow: 0 0 20px cyan;
-        }
+    @media (max-width: 640px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      .result-value {
+        font-size: 1.3rem;
+      }
+      .product-name {
+        font-size: 1.2rem;
+      }
+    }
 
-        /* أزرار السوشيال */
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        .social-btn {
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            padding: 14px 25px;
-            border-radius: 60px;
-            border: 1px solid cyan;
-            color: cyan;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .social-btn i {
-            font-size: 1.4rem;
-        }
-        .social-btn:hover {
-            background: cyan;
-            color: black;
-            box-shadow: 0 0 30px cyan;
-            transform: scale(1.05);
-        }
-        .copy-feedback {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: cyan;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 30px;
-            z-index: 1000;
-            font-weight: bold;
-        }
-
-        /* موسيقى */
-        .music-control {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 50px;
-            padding: 12px 18px;
-            z-index: 999;
-            border: 1px solid cyan;
-            cursor: pointer;
-            color: cyan;
-            font-size: 1.3rem;
-            transition: 0.3s;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid rgba(0,255,255,0.2);
-            margin-top: 70px;
-            background: rgba(0,0,0,0.5);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .typed-text { font-size: 1.2rem; }
-            h2 { font-size: 2rem; }
-            .social-btn { padding: 8px 18px; font-size: 0.9rem;}
-        }
-    </style>
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.7rem;
+      color: #4a5568;
+    }
+  </style>
 </head>
 <body>
 
-
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="splash" id="splashScreen">
+  <div class="splash-logo">🐓 FeedMaster Pro</div>
+  <div style="color:#ffa05e;">نظام المحاسبة اليومي للأعلاف</div>
+  <div style="font-size:0.8rem;">باقات | كيلو فارط | حسابات فورية</div>
+  <button class="btn-primary" id="closeSplashBtn" style="margin-top:20px;">ابدأ العمل ➡️</button>
 </div>
-<div class="cursor-glow" id="cursorGlow"></div>
-<div class="progress-container"><div class="progress-bar-read" id="readBar"></div></div>
-<div class="matrix-bg"></div>
-<canvas id="particles-canvas"></canvas>
 
-<!-- موسيقى خلفية (ملف تجريبي صامت قصير، سيتم تشغيله بعد تفاعل المستخدم) -->
-<audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
-<div class="container">
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="avatar">
-                <!-- استبدل الرابط أدناه بالرابط المباشر للصورة الشخصية -->
-                <img src="https://res.cloudinary.com/dmti0bnlj/image/upload/v1780185491/1775524003637_leyy9e.png" alt="عزيز عماد" id="profileImg">
-                <div class="glow-ring"></div>
-            </div>
-            <h1>عزيز عماد</h1>
-            <div class="typed-text" id="typedOutput"></div>
-            <div class="hero-desc animate__animated animate__fadeInUp">
-                أنا عزيز عماد، مطور ومحب للتكنولوجيا والبرمجة والإلكترونيات والذكاء الاصطناعي، أعمل على تطوير أفكار ومشاريع مستقبلية تجمع بين الإبداع والتقنية.
-            </div>
-        </div>
-    </section>
+<div class="app-container">
+  <div class="dashboard-header">
+    <div class="title-section">
+      <h1>📍 مدير الأعلاف الذكي</h1>
+      <p>حساب الأكياس + الكيلو فارط • تحويل فوري إلى كيلو والعدد عشري</p>
+    </div>
+    <div class="action-buttons">
+      <button class="btn-primary" id="addProductBtn">➕ إضافة منتج جديد</button>
+      <button class="btn-secondary" id="resetQuantitiesBtn">🔄 إعادة تعيين الكميات</button>
+    </div>
+  </div>
 
-    <!-- المعلومات الشخصية -->
-    <section>
-        <h2><i class="fas fa-user-astronaut"></i> الملف الرقمي</h2>
-        <div class="grid-cards">
-            <div class="glass-card"><i class="fas fa-user"></i><strong>الاسم:</strong> عزيز عماد</div>
-            <div class="glass-card"><i class="fas fa-calendar-alt"></i><strong>العمر:</strong> 19 سنة</div>
-            <div class="glass-card"><i class="fas fa-flag"></i><strong>الجنسية:</strong> مصري</div>
-            <div class="glass-card"><i class="fas fa-map-marker-alt"></i><strong>مكان الميلاد:</strong> كفر صقر - الشرقية - مصر</div>
-            <div class="glass-card"><i class="fas fa-home"></i><strong>الإقامة:</strong> العاشر من رمضان - الحي الثاني عشر</div>
-            <div class="glass-card"><i class="fas fa-tooth"></i><strong>الدراسة:</strong> طالب بكلية طب الأسنان</div>
-            <div class="glass-card"><i class="fas fa-language"></i><strong>اللغة الأساسية:</strong> العربية</div>
-            <div class="glass-card"><i class="fas fa-language"></i><strong>اللغة الثانية:</strong> الإنجليزية</div>
-        </div>
-    </section>
+  <div class="search-bar">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 بحث باسم العلف أو الوزن ...">
+  </div>
 
-    <!-- المهارات -->
-    <section>
-        <h2><i class="fas fa-code"></i> قدرات تقنية فائقة</h2>
-        <div class="grid-cards">
-            <div class="glass-card skill-item"><div class="skill-name"><span>HTML</span><span>95%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="95"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>CSS</span><span>90%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="90"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>JavaScript</span><span>88%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="88"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>تصميم واجهات احترافية</span><span>92%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="92"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>الذكاء الاصطناعي وكتابة الـ Prompts</span><span>89%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="89"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>برمجة الهواتف</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="75"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>الإلكترونيات</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="85"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>تعديل تطبيقات أندرويد</span><span>78%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="78"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>تصميم واجهات سايبربنك</span><span>94%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="94"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>المونتاج وتعديل الصوت</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="80"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>التفكير الإبداعي</span><span>98%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="98"></div></div></div>
-            <div class="glass-card skill-item"><div class="skill-name"><span>حل المشكلات</span><span>92%</span></div><div class="skill-bar-bg"><div class="skill-fill" data-skill="92"></div></div></div>
-        </div>
-    </section>
+  <div id="productsContainer" class="products-grid"></div>
+  <footer>✓ يتم الحفظ التلقائي • أدخل عدد الأكياس والكيلو الفارط • تحسب الاجمالي وعدد الأكياس العشري تلقائياً</footer>
+</div>
 
-    <!-- من أنا -->
-    <section>
-        <h2><i class="fas fa-brain"></i> هوية رقمية</h2>
-        <div class="glass-card" style="padding: 35px;">
-            <p style="font-size: 1.2rem; line-height: 1.8;">⚡ أنا عزيز عماد، شاب طموح متعدد المهارات، شغوف بالتكنولوجيا ومحب للإبداع. أمتلك عقلية تطوير وابتكار، أسعى دائمًا لتعلم أشياء جديدة، أحوّل الأفكار إلى مشاريع حقيقية. أجمع بين دراسة طب الأسنان والتقنية والإبداع، لأن المستقبل لا يعترف بالحدود التقليدية. 🚀</p>
-        </div>
-    </section>
-
-    <!-- المشاريع -->
-    <section>
-        <h2><i class="fas fa-project-diagram"></i> مشاريع المستقبل</h2>
-        <div class="grid-cards">
-            <div class="project-card"><div class="icon"><i class="fas fa-code-branch"></i></div><h3>منصة A-Code</h3><p>بيئة تطوير سحابية تعمل بالذكاء الاصطناعي</p><button class="neon-btn">1</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-graduation-cap"></i></div><h3>منصة EDU-MIX</h3><p>تعليم تفاعلي متعدد التخصصات</p><button class="neon-btn">2</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-waveform"></i></div><h3>محرر الصوت الاحترافي</h3><p>تحرير صوتي بمعايير السينما</p><button class="neon-btn">3</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-shield-virus"></i></div><h3>محاكي أنتي فايروس مستقبلي</h3><p>حماية افتراضية بالذكاء الاصطناعي</p><button class="neon-btn">4</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-robot"></i></div><h3>أنظمة تعليم بالذكاء الاصطناعي</h3><p>مدرّب شخصي ذكي لكل طالب</p><button class="neon-btn">5</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-dna"></i></div><h3>منصات أحياء تفاعلية</h3><p>محاكاة ثلاثية الأبعاد للعلوم</p><button class="neon-btn">6</button></div>
-            <div class="project-card"><div class="icon"><i class="fas fa-terminal"></i></div><h3>واجهات Terminal مستقبلية</h3><p>تصميم CLI احترافي بتقنيات الويب</p><button class="neon-btn">7</button></div>
-        </div>
-    </section>
-
-    <!-- تواصل -->
-    <section>
-        <h2><i class="fas fa-network-wired"></i> الشبكة الرقمية</h2>
-        <div class="social-links">
-            <a href="https://www.facebook.com/share/1DZvJeFLr6/" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i> فيسبوك</a>
-            <a href="https://www.instagram.com/lu_1_nl" target="_blank" class="social-btn"><i class="fab fa-instagram"></i> إنستجرام</a>
-            <a href="https://www.tiktok.com/@dr_aziz_emad" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i> تيك توك</a>
-            <a href="https://t.me/azizemad" target="_blank" class="social-btn"><i class="fab fa-telegram"></i> تيليجرام</a>
-            <a href="https://www.threads.com/@lu_1_nl" target="_blank" class="social-btn"><i class="fab fa-threads"></i> Threads</a>
-            <a href="tel:01206622787" class="social-btn"><i class="fas fa-phone-alt"></i> اتصال مباشر</a>
-            <a href="https://wa.me/201206622787" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i> واتساب</a>
-            <button id="copyPhoneBtn" class="social-btn" style="background: none; border: 1px solid cyan;"><i class="fas fa-copy"></i> نسخ الرقم</button>
-        </div>
-    </section>
-
-    <footer>
-        <p>التكنولوجيا ليست مجرد أكواد… بل إبداع بلا حدود. 🔥</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">&copy; 2026 عزيز عماد - المستقبل ينتظر الابتكار</p>
-    </footer>
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">إضافة منتج جديد</h3>
+    <input type="text" id="productNameInput" placeholder="اسم العلف (مثال: حبوب تسمين)" autocomplete="off">
+    <input type="text" id="productWeightInput" placeholder="وزن الكيس (كجم)" value="50" autocomplete="off">
+    <div class="modal-buttons">
+      <button id="modalSaveBtn" class="save-modal">💾 حفظ</button>
+      <button id="modalCancelBtn" class="btn-secondary">إلغاء</button>
+    </div>
+  </div>
 </div>
 
 <script>
-    // شريط تحميل
-    let width = 0;
-    const interval = setInterval(() => {
-        if (width >= 100) clearInterval(interval);
-        else { width += Math.random() * 15; if(width>100) width=100; document.getElementById('progressFill').style.width = width+'%'; }
-        if(width>=100) setTimeout(()=>{ document.getElementById('loader').style.opacity='0'; setTimeout(()=>{ document.getElementById('loader').style.display='none'; }, 1000); }, 300);
-    }, 200);
+  // Default Products
+  const DEFAULT_PRODUCTS = [
+    { id: 'p1', name: 'بادي', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p2', name: 'نامي', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p3', name: 'ناهي', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p4', name: 'بياض', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p5', name: 'ذهبي', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p6', name: 'قمح', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p7', name: 'عويقه', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p8', name: 'مواشي تسمين', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p9', name: 'ارانب تسمين', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p10', name: 'ارانب مرضعات', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p11', name: 'كسر فول', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p12', name: 'فول صحيح', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p13', name: 'بسله', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p14', name: 'دكتور مينا', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p15', name: 'رمايه سوبر', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p16', name: 'رمايه عادي', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p17', name: 'اسكندريه', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p18', name: 'ردة', bagWeight: 40, bags: 0, looseKg: 0 },
+    { id: 'p19', name: 'ابناء الشرقيه', bagWeight: 40, bags: 0, looseKg: 0 },
+    { id: 'p20', name: 'المراعي', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p21', name: 'علف بط', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p22', name: 'ذهبي صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p23', name: 'بادي صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p24', name: 'نامي صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p25', name: 'ناهي صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p26', name: 'بياض صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p27', name: 'دشيشه صغير', bagWeight: 25, bags: 0, looseKg: 0 },
+    { id: 'p28', name: 'دشيشه', bagWeight: 25, bags: 0, looseKg: 0 }
+  ];
 
-    // cursor glow
-    const cursor = document.getElementById('cursorGlow');
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'pageYOffset' + 'px';
-    });
-    document.body.addEventListener('mouseleave', ()=> cursor.style.opacity = '0');
-    document.body.addEventListener('mouseenter', ()=> cursor.style.opacity = '1');
+  let products = [];
 
-    // شريط تقدم القراءة
-    window.addEventListener('scroll', () => {
-        const winScroll = document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById('readBar').style.width = scrolled + '%';
-    });
-
-    // الكتابة المتحركة
-    const texts = ["طالب طب أسنان | مبرمج | عاشق للإلكترونيات والتكنولوجيا ", "دكتور    المستقبل ", "مُبدع ", "  صانع محتوى تقني "];
-    let idx = 0, charIdx = 0, isDeleting = false;
-    function typeEffect() {
-        let current = texts[idx];
-        let outputSpan = document.getElementById('typedOutput');
-        if(isDeleting) outputSpan.innerText = current.substring(0, charIdx--);
-        else outputSpan.innerText = current.substring(0, charIdx++);
-        if(!isDeleting && charIdx === current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
-        if(isDeleting && charIdx === 0) { isDeleting=false; idx=(idx+1)%texts.length; }
-        setTimeout(typeEffect, isDeleting?50:100);
+  function loadProductsFromStorage() {
+    const stored = localStorage.getItem('feed_manager_products');
+    if (stored) {
+      try {
+        let parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length) {
+          products = parsed;
+          return;
+        }
+      } catch(e) {}
     }
-    typeEffect();
-
-    // Reveal on scroll
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('revealed'); });
-    }, { threshold: 0.2 });
-    sections.forEach(sec => observer.observe(sec));
-
-    // Activate skill bars when visible
-    const skillFill = document.querySelectorAll('.skill-fill');
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting){
-                let elem = entry.target;
-                let percent = elem.getAttribute('data-skill');
-                elem.style.width = percent + '%';
-            }
-        });
-    }, {threshold:0.5});
-    skillFill.forEach(s => skillObserver.observe(s));
-
-    // Copy phone
-    document.getElementById('copyPhoneBtn').addEventListener('click', () => {
-        navigator.clipboard.writeText('01206622787');
-        let msg = document.createElement('div'); msg.className = 'copy-feedback'; msg.innerText = '✅ تم نسخ الرقم: 01206622787';
-        document.body.appendChild(msg);
-        setTimeout(()=> msg.remove(), 2000);
+    products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+    products.forEach(p => {
+      if (p.bags === undefined) p.bags = 0;
+      if (p.looseKg === undefined) p.looseKg = 0;
+      if (!p.id) p.id = crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random();
     });
+    saveToLocalStorage();
+  }
 
-    // Music toggle
-    const music = document.getElementById('bg-music');
-    const toggleBtn = document.getElementById('musicToggle');
-    let musicPlaying = false;
-    toggleBtn.addEventListener('click', () => {
-        if(!musicPlaying) { music.play().catch(e=>console.log("autoplay prevented")); toggleBtn.innerHTML = '<i class="fas fa-stop"></i>'; musicPlaying=true; }
-        else { music.pause(); toggleBtn.innerHTML = '<i class="fas fa-music"></i>'; musicPlaying=false; }
+  function saveToLocalStorage() {
+    localStorage.setItem('feed_manager_products', JSON.stringify(products));
+  }
+
+  // تحديث قيمة معينة دون إعادة رسم كامل
+  function updateSingleProductUI(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+    if (!card) return;
+    
+    const bagWeight = product.bagWeight;
+    const bags = product.bags || 0;
+    const looseKg = product.looseKg || 0;
+    const totalKg = (bags * bagWeight) + looseKg;
+    const decimalBags = bagWeight > 0 ? totalKg / bagWeight : 0;
+    const decimalBagsFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
+    
+    // تحديث حقول الإدخال (مع الحفاظ على التركيز)
+    const bagsInput = card.querySelector('.bags-input');
+    const looseInput = card.querySelector('.loose-input');
+    
+    if (bagsInput && document.activeElement !== bagsInput) {
+      bagsInput.value = bags;
+    }
+    if (looseInput && document.activeElement !== looseInput) {
+      looseInput.value = looseKg;
+    }
+    
+    // تحديث النتائج
+    const totalKgSpan = card.querySelector('.result-total-kg');
+    const decimalBagsSpan = card.querySelector('.result-decimal-bags');
+    
+    if (totalKgSpan) totalKgSpan.textContent = `${Math.round(totalKg * 10) / 10} كجم`;
+    if (decimalBagsSpan) decimalBagsSpan.textContent = `${decimalBagsFormatted} كيس`;
+  }
+
+  function updateProductQuantity(productId, field, value) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    let num = parseFloat(value);
+    if (isNaN(num)) num = 0;
+    if (num < 0) num = 0;
+    
+    if (field === 'bags') {
+      product.bags = num;
+    } else if (field === 'loose') {
+      product.looseKg = num;
+    }
+    
+    saveToLocalStorage();
+    updateSingleProductUI(productId);
+  }
+
+  let currentEditProductId = null;
+
+  function openAddModal() {
+    currentEditProductId = null;
+    document.getElementById('modalTitle').innerText = '➕ إضافة علف جديد';
+    document.getElementById('productNameInput').value = '';
+    document.getElementById('productWeightInput').value = '50';
+    document.getElementById('productModal').style.display = 'flex';
+  }
+
+  function openEditModal(productId) {
+    const prod = products.find(p => p.id === productId);
+    if (!prod) return;
+    currentEditProductId = productId;
+    document.getElementById('modalTitle').innerText = '✏️ تعديل المنتج';
+    document.getElementById('productNameInput').value = prod.name;
+    document.getElementById('productWeightInput').value = prod.bagWeight;
+    document.getElementById('productModal').style.display = 'flex';
+  }
+
+  function deleteProductById(productId) {
+    if (products.length <= 1) {
+      alert("لا يمكن حذف آخر منتج، يمكنك تعديله بدلاً من ذلك.");
+      return;
+    }
+    products = products.filter(p => p.id !== productId);
+    saveToLocalStorage();
+    renderProducts(); // إعادة رسم كامل فقط عند الحذف
+  }
+
+  function saveProductFromModal() {
+    let name = document.getElementById('productNameInput').value.trim();
+    let weightRaw = document.getElementById('productWeightInput').value;
+    let weight = parseFloat(weightRaw);
+    
+    if (!name || name === "") {
+      alert("الرجاء إدخال اسم العلف");
+      return;
+    }
+    if (isNaN(weight) || weight <= 0) {
+      alert("وزن الكيس يجب أن يكون رقماً موجباً");
+      return;
+    }
+    
+    if (currentEditProductId) {
+      const index = products.findIndex(p => p.id === currentEditProductId);
+      if (index !== -1) {
+        products[index].name = name;
+        products[index].bagWeight = weight;
+        saveToLocalStorage();
+        renderProducts();
+      }
+    } else {
+      const newId = crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random();
+      products.push({
+        id: newId,
+        name: name,
+        bagWeight: weight,
+        bags: 0,
+        looseKg: 0
+      });
+      saveToLocalStorage();
+      renderProducts();
+    }
+    closeModal();
+  }
+
+  function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+    currentEditProductId = null;
+  }
+
+  function resetAllQuantities() {
+    products.forEach(p => {
+      p.bags = 0;
+      p.looseKg = 0;
     });
+    saveToLocalStorage();
+    renderProducts();
+  }
 
-    // Particles effect dynamic
-    const canvas = document.getElementById('particles-canvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    class Particle { constructor(){ this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.size=Math.random()*2+1; this.speedX=Math.random()*0.5-0.25; this.speedY=Math.random()*0.5-0.25; this.color=`rgba(0, 255, 255, ${Math.random()*0.5})`; } update(){ this.x+=this.speedX; this.y+=this.speedY; if(this.x<0||this.x>canvas.width) this.speedX*=-1; if(this.y<0||this.y>canvas.height) this.speedY*=-1; } draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill(); } }
-    for(let i=0;i<120;i++) particlesArray.push(new Particle());
-    function animateParticles(){ ctx.clearRect(0,0,canvas.width,canvas.height); particlesArray.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
-    animateParticles();
-    window.addEventListener('resize', ()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
+  // معالج الأرقام مع دعم العربية
+  function handleNumericInput(e, productId, field) {
+    let rawValue = e.target.value;
+    // تحويل الأرقام العربية إلى إنجليزية
+    let converted = rawValue.replace(/[٠-٩]/g, function(d) {
+      return String.fromCharCode(d.charCodeAt(0) - 1632);
+    });
+    // السماح فقط بالأرقام والنقطة
+    let filtered = converted.replace(/[^0-9.]/g, '');
+    // التأكد من وجود نقطة واحدة فقط
+    let parts = filtered.split('.');
+    if (parts.length > 2) {
+      filtered = parts[0] + '.' + parts.slice(1).join('');
+    }
+    
+    if (filtered !== e.target.value) {
+      e.target.value = filtered;
+    }
+    
+    updateProductQuantity(productId, field, filtered);
+  }
 
-    // Edit profile image placeholder -> يمكنك وضع رابط الصورة المباشر
-    // استخدم هذا الرابط إذا قمت برفع الصورة على خدمة مؤقتة: 
-    // document.getElementById('profileImg').src = "https://collection.cloudinary.com/dmti0bnlj/a75e0a8e164979403f3b9df16782fb22";
-    // ملاحظة: الرابط المقدم من google photos ليس رابطاً مباشراً للصورة، لذا سيبقى placeholder حاليًا.
+  function renderProducts() {
+    const container = document.getElementById('productsContainer');
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    let filteredProducts = products.filter(prod => 
+      prod.name.toLowerCase().includes(searchTerm) || 
+      prod.bagWeight.toString().includes(searchTerm)
+    );
+    
+    if (filteredProducts.length === 0) {
+      container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; background:#11151e; border-radius: 48px;">لا توجد منتجات مطابقة 🔍</div>`;
+      return;
+    }
+    
+    container.innerHTML = filteredProducts.map(product => {
+      const bagWeight = product.bagWeight;
+      const bags = product.bags || 0;
+      const looseKg = product.looseKg || 0;
+      const totalKg = (bags * bagWeight) + looseKg;
+      const decimalBags = bagWeight > 0 ? totalKg / bagWeight : 0;
+      const decimalBagsFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
+      
+      return `
+        <div class="product-card" data-product-id="${product.id}">
+          <div class="card-header">
+            <span class="product-name">${escapeHtml(product.name)}</span>
+            <span class="bag-weight-badge">⚖️ الكيس: ${bagWeight} كجم</span>
+          </div>
+          <div class="input-group">
+            <label>📦 عدد الأكياس</label>
+            <input type="text" inputmode="decimal" value="${bags}" class="number-input bags-input" data-id="${product.id}" data-field="bags" placeholder="0" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <label>⚖️ كيلو فارط (كجم)</label>
+            <input type="text" inputmode="decimal" value="${looseKg}" class="number-input loose-input" data-id="${product.id}" data-field="loose" placeholder="0" autocomplete="off">
+          </div>
+          <div class="results">
+            <div class="result-item">
+              <span class="result-label">📊 إجمالي كجم</span>
+              <span class="result-value result-total-kg">${Math.round(totalKg * 10) / 10} كجم</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">🛍️ أكياس عشرية</span>
+              <span class="result-value decimal-bags result-decimal-bags">${decimalBagsFormatted} كيس</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn edit-btn" data-action="edit" data-id="${product.id}">✏️ تعديل</button>
+            <button class="icon-btn delete-btn" data-action="delete" data-id="${product.id}">🗑️ حذف</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // إضافة المستمعات للأحداث
+    document.querySelectorAll('.bags-input').forEach(input => {
+      const productId = input.getAttribute('data-id');
+      input.removeEventListener('input', window[`handler_${productId}_bags`]);
+      const handler = (e) => handleNumericInput(e, productId, 'bags');
+      window[`handler_${productId}_bags`] = handler;
+      input.addEventListener('input', handler);
+    });
+    
+    document.querySelectorAll('.loose-input').forEach(input => {
+      const productId = input.getAttribute('data-id');
+      input.removeEventListener('input', window[`handler_${productId}_loose`]);
+      const handler = (e) => handleNumericInput(e, productId, 'loose');
+      window[`handler_${productId}_loose`] = handler;
+      input.addEventListener('input', handler);
+    });
+    
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.removeEventListener('click', handleEditClick);
+      btn.addEventListener('click', handleEditClick);
+    });
+    
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.removeEventListener('click', handleDeleteClick);
+      btn.addEventListener('click', handleDeleteClick);
+    });
+  }
+  
+  function handleEditClick(e) {
+    const id = e.currentTarget.getAttribute('data-id');
+    openEditModal(id);
+  }
+  
+  function handleDeleteClick(e) {
+    const id = e.currentTarget.getAttribute('data-id');
+    if (confirm("هل أنت متأكد من حذف هذا العلف؟")) {
+      deleteProductById(id);
+    }
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+  function initSplash() {
+    const splashDiv = document.getElementById('splashScreen');
+    const closeBtn = document.getElementById('closeSplashBtn');
+    if (localStorage.getItem('splash_seen') === 'true') {
+      splashDiv.classList.add('hidden');
+    } else {
+      splashDiv.classList.remove('hidden');
+      closeBtn.addEventListener('click', () => {
+        splashDiv.classList.add('hidden');
+        localStorage.setItem('splash_seen', 'true');
+      });
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProductsFromStorage();
+    renderProducts();
+    initSplash();
+    
+    document.getElementById('addProductBtn').addEventListener('click', openAddModal);
+    document.getElementById('resetQuantitiesBtn').addEventListener('click', () => {
+      if(confirm("إعادة تعيين جميع الكميات إلى صفر؟")) {
+        resetAllQuantities();
+      }
+    });
+    document.getElementById('modalSaveBtn').addEventListener('click', saveProductFromModal);
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    document.getElementById('searchInput').addEventListener('input', () => renderProducts());
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('productModal')) closeModal();
+    });
+  });
+  
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'feed_manager_products') {
+      loadProductsFromStorage();
+      renderProducts();
+    }
+  });
 </script>
 </body>
-  </html>
+</html>
