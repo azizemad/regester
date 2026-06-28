@@ -51,6 +51,7 @@
     .action-buttons {
       display: flex;
       gap: 12px;
+      flex-wrap: wrap;
     }
     .btn-primary {
       background: #ff7a2f;
@@ -121,6 +122,39 @@
       background: #dc2626;
       transform: scale(0.97);
     }
+    .btn-success {
+      background: #15803d;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .btn-success:hover {
+      background: #16a34a;
+      transform: scale(0.97);
+    }
+    .btn-confirm {
+      background: #2563eb;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+    .btn-confirm:hover {
+      background: #3b82f6;
+      transform: scale(0.97);
+    }
 
     .search-bar {
       margin-bottom: 2rem;
@@ -178,6 +212,45 @@
     #branchNameInput::placeholder {
       color: #5f6c7a;
     }
+    .whatsapp-number-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0c0f15;
+      padding: 5px 15px;
+      border-radius: 60px;
+    }
+    .whatsapp-number-group label {
+      color: #4ade80;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    #whatsappNumberInput {
+      background: transparent;
+      border: none;
+      padding: 12px 0;
+      font-size: 1rem;
+      color: white;
+      outline: none;
+      width: 130px;
+      direction: ltr;
+    }
+    #whatsappNumberInput::placeholder {
+      color: #5f6c7a;
+    }
+    .btn-change-wa {
+      background: #1e293b;
+      border: 1px solid #4ade80;
+      color: #4ade80;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-change-wa:hover {
+      background: #2d3b4f;
+    }
 
     .products-grid {
       display: grid;
@@ -193,6 +266,19 @@
       padding: 1.3rem 1.5rem;
       transition: all 0.25s ease;
       box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.4);
+      cursor: grab;
+      user-select: none;
+    }
+    .product-card:active {
+      cursor: grabbing;
+    }
+    .product-card.dragging {
+      opacity: 0.5;
+      border-color: #ff7a2f;
+    }
+    .product-card.drag-over {
+      border-color: #4ade80;
+      border-width: 2px;
     }
     .product-card:hover {
       border-color: #ff7a2f50;
@@ -227,7 +313,7 @@
     }
 
     .input-group {
-      margin: 1rem 0;
+      margin: 0.8rem 0;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -286,6 +372,9 @@
     .decimal-bags {
       color: #4ade80;
     }
+    .total-kg {
+      color: #60a5fa;
+    }
 
     .card-actions {
       display: flex;
@@ -321,6 +410,17 @@
       background: #2c1a1f;
       color: #ff8a8a;
     }
+    .drag-handle {
+      color: #4a5568;
+      cursor: grab;
+      font-size: 1.2rem;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .drag-handle:hover {
+      background: #1e293b;
+      color: #9ca3af;
+    }
 
     .modal {
       display: none;
@@ -338,14 +438,17 @@
       border-radius: 48px;
       padding: 2rem;
       width: 90%;
-      max-width: 450px;
+      max-width: 700px;
       border: 1px solid #ff7a2f55;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .modal-content h3 {
       font-size: 1.8rem;
       margin-bottom: 1rem;
+      color: #ffa05e;
     }
-    .modal input {
+    .modal input, .modal textarea {
       width: 100%;
       padding: 14px;
       margin: 12px 0;
@@ -355,18 +458,57 @@
       color: white;
       font-size: 1rem;
     }
+    .modal textarea {
+      border-radius: 24px;
+      min-height: 150px;
+      resize: vertical;
+      font-family: inherit;
+    }
     .modal-buttons {
       display: flex;
       gap: 12px;
       margin-top: 20px;
+      flex-wrap: wrap;
     }
     .save-modal {
       background: #ff7a2f;
       border: none;
-      padding: 12px;
+      padding: 12px 24px;
       border-radius: 60px;
       font-weight: bold;
       cursor: pointer;
+      color: #0a0c10;
+    }
+    .save-modal:hover {
+      background: #ff9330;
+    }
+
+    .review-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 0.85rem;
+    }
+    .review-table th {
+      background: #1e293b;
+      color: #ffa05e;
+      padding: 10px;
+      text-align: center;
+      border-bottom: 2px solid #ff7a2f55;
+    }
+    .review-table td {
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: 1px solid #2a2e3a;
+    }
+    .review-table .matched {
+      color: #4ade80;
+    }
+    .review-table .unmatched {
+      color: #f87171;
+    }
+    .review-table .new-product {
+      color: #60a5fa;
     }
 
     .splash {
@@ -404,6 +546,26 @@
       color: #fed7aa;
     }
 
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 12px 24px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      border: 1px solid #ff7a2f55;
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+
     @media (max-width: 640px) {
       .products-grid {
         grid-template-columns: 1fr;
@@ -413,6 +575,13 @@
       }
       .product-name {
         font-size: 1.2rem;
+      }
+      .branch-send-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .whatsapp-number-group {
+        flex-wrap: wrap;
       }
     }
 
@@ -437,9 +606,10 @@
   <div class="dashboard-header">
     <div class="title-section">
       <h1>📍 مدير الأعلاف الذكي</h1>
-      <p>حساب الشكاير  + الكيلو فارط • بدون حفظ تلقائي (جلسة مؤقتة)</p>
+      <p>حساب الشكاير + الكيلو فارط • جلسة مؤقتة</p>
     </div>
     <div class="action-buttons">
+      <button class="btn-success" id="importFromTextBtn">📥 استيراد من رسالة</button>
       <button class="btn-primary" id="addProductBtn">➕ إضافة منتج جديد</button>
       <button class="btn-secondary" id="resetQuantitiesBtn">🔄 إعادة تعيين الكميات</button>
     </div>
@@ -454,7 +624,12 @@
       <label>🏢 الفرع:</label>
       <input type="text" id="branchNameInput" placeholder="مثال: فرع المنصورة" autocomplete="off">
     </div>
-    <button class="btn-whatsapp" id="sendWhatsAppBtn">📲 إرسال التقرير إلى الواتساب</button>
+    <div class="whatsapp-number-group">
+      <label>📱 واتساب:</label>
+      <input type="text" id="whatsappNumberInput" value="+201015913800" placeholder="+20..." autocomplete="off">
+      <button class="btn-change-wa" id="changeWaNumberBtn">تغيير</button>
+    </div>
+    <button class="btn-whatsapp" id="sendWhatsAppBtn">📲 إرسال التقرير</button>
   </div>
 
   <div class="search-bar">
@@ -462,9 +637,10 @@
   </div>
 
   <div id="productsContainer" class="products-grid"></div>
-  <footer>✓ بدون حفظ تلقائي • أدخل عدد الشكاير  والكيلو الفارط • تحسب الاجمالي وعدد الشكاير  العشري تلقائياً</footer>
+  <footer>✓ اسحب البطاقات لإعادة الترتيب • أدخل الشكاير والكيلو الفارط لحساب الإجمالي</footer>
 </div>
 
+<!-- Modal إضافة/تعديل -->
 <div id="productModal" class="modal">
   <div class="modal-content">
     <h3 id="modalTitle">إضافة منتج جديد</h3>
@@ -477,8 +653,49 @@
   </div>
 </div>
 
+<!-- Modal استيراد من رسالة (المراجعة) -->
+<div id="importModal" class="modal">
+  <div class="modal-content" style="max-width: 850px;">
+    <h3>📥 استيراد كميات من رسالة</h3>
+    <p style="color:#9ca3af; font-size:0.85rem; margin-bottom:10px;">الصق النص الذي يحتوي على الكميات، ثم اضغط "مراجعة واستيراد"</p>
+    <textarea id="importTextArea" placeholder="الصق النص هنا..." style="min-height:120px;"></textarea>
+    <div class="modal-buttons">
+      <button id="importReviewBtn" class="btn-confirm">🔍 مراجعة واستيراد</button>
+      <button id="importCancelBtn" class="btn-secondary">إلغاء</button>
+    </div>
+    <div id="importReviewContainer" style="display:none; margin-top:20px; border-top: 1px solid #2a2e3a; padding-top:15px;">
+      <h4 style="color:#ffa05e;">📋 مراجعة البيانات المستوردة</h4>
+      <div id="reviewTableWrapper" style="overflow-x:auto;"></div>
+      <div style="display:flex; gap:12px; margin-top:15px; flex-wrap:wrap;">
+        <button id="importConfirmBtn" class="save-modal">✅ اعتماد الاستيراد</button>
+        <button id="importRejectBtn" class="btn-secondary">❌ إلغاء</button>
+      </div>
+      <div id="importReport" style="margin-top:10px; color:#9ca3af; font-size:0.9rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal اختيار الوزن لكسب -->
+<div id="weightChoiceModal" class="modal">
+  <div class="modal-content" style="max-width:450px;">
+    <h3>⚠️ اختر نوع الكسب</h3>
+    <p style="color:#9ca3af; margin-bottom:15px;">تم العثور على "كسب" بدون تحديد النوع. اختر الوزن المناسب:</p>
+    <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn-primary" data-weight="50" style="min-width:120px;">كسب خشن (50 كجم)</button>
+      <button class="btn-primary" data-weight="40" style="min-width:120px;">كسب ناعم (40 كجم)</button>
+    </div>
+    <div style="margin-top:15px; text-align:center;">
+      <button id="weightChoiceCancel" class="btn-secondary">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
-  // المنتجات الافتراضية (بدون استخدام localStorage)
+  // ============================================================
+  // المنتجات الافتراضية
+  // ============================================================
   const DEFAULT_PRODUCTS = [
     { id: 'p1', name: 'بادي', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p2', name: 'نامي', bagWeight: 50, bags: 0, looseKg: 0 },
@@ -486,7 +703,7 @@
     { id: 'p4', name: 'بياض', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p5', name: 'ذهبي', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p6', name: 'قمح', bagWeight: 50, bags: 0, looseKg: 0 },
-    { id: 'p7', name: 'عويقه', bagWeight: 50, bags: 0, looseKg: 0 },
+    { id: 'p7', name: 'عويجه', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p8', name: 'مواشي تسمين', bagWeight: 50, bags: 0, looseKg: 0 },
     { id: 'p9', name: 'ارانب تسمين', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p10', name: 'ارانب مرضعات', bagWeight: 25, bags: 0, looseKg: 0 },
@@ -494,9 +711,9 @@
     { id: 'p12', name: 'فول صحيح', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p13', name: 'بسله', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p14', name: 'دكتور مينا', bagWeight: 20, bags: 0, looseKg: 0 },
-    { id: 'p15', name: 'رمايه سوبر', bagWeight: 20, bags: 0, looseKg: 0 },
-    { id: 'p16', name: 'رمايه عادي', bagWeight: 20, bags: 0, looseKg: 0 },
-    { id: 'p17', name: 'اسكندريه', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p15', name: 'رماية سوبر', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p16', name: 'رماية عادي', bagWeight: 20, bags: 0, looseKg: 0 },
+    { id: 'p17', name: 'اسكندرية', bagWeight: 20, bags: 0, looseKg: 0 },
     { id: 'p18', name: 'ردة', bagWeight: 40, bags: 0, looseKg: 0 },
     { id: 'p19', name: 'ابناء الشرقيه', bagWeight: 40, bags: 0, looseKg: 0 },
     { id: 'p20', name: 'المراعي', bagWeight: 25, bags: 0, looseKg: 0 },
@@ -508,13 +725,98 @@
     { id: 'p26', name: 'بياض صغير', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p27', name: 'دشيشه صغير', bagWeight: 25, bags: 0, looseKg: 0 },
     { id: 'p28', name: 'شعير', bagWeight: 50, bags: 0, looseKg: 0 },
-    { id: 'p29', name: 'بادي نامي ', bagWeight: 10, bags: 0, looseKg: 0 },
+    { id: 'p29', name: 'بادي نامي', bagWeight: 10, bags: 0, looseKg: 0 },
     { id: 'p30', name: 'دشيشه', bagWeight: 50, bags: 0, looseKg: 0 }
   ];
 
   let products = [];
+  let currentEditProductId = null;
+  let whatsappNumber = '+201015913800';
 
-  // تهيئة المنتجات بدون استخدام localStorage
+  // ============================================================
+  // قاموس المرادفات (Synonym Dictionary)
+  // ============================================================
+  const SYNONYM_MAP = {
+    'المراعى': 'المراعي',
+    'المراعي': 'المراعي',
+    'مراعي': 'المراعي',
+    'دهبى': 'ذهبي',
+    'ذهبى': 'ذهبي',
+    'ذهبي': 'ذهبي',
+    'بادى': 'بادي',
+    'بادي': 'بادي',
+    'نامى': 'نامي',
+    'نامي': 'نامي',
+    'ناهى': 'ناهي',
+    'ناهي': 'ناهي',
+    'بط': 'علف بط',
+    'علف بط': 'علف بط',
+    'دش': 'دشيشه',
+    'دشيشه': 'دشيشه',
+    'دشيشة': 'دشيشه',
+    'دشيشه خشنه': 'دشيشه',
+    'دشيشة خشنة': 'دشيشه',
+    'دشيشه وسط': 'دشيشه',
+    'مرضعات': 'ارانب مرضعات',
+    'ارانب مرضعات': 'ارانب مرضعات',
+    'ارنب تسمين': 'ارانب تسمين',
+    'ارانب تسمين': 'ارانب تسمين',
+    'د مينا': 'دكتور مينا',
+    'دكتور مينا': 'دكتور مينا',
+    'كلفه د مينا': 'دكتور مينا',
+    'رمايه': 'رماية',
+    'رماية': 'رماية',
+    'اسكندريه': 'اسكندرية',
+    'اسكندرية': 'اسكندرية',
+    'رمايه سوبر': 'رماية سوبر',
+    'رماية سوبر': 'رماية سوبر',
+    'رمايه عاديه': 'رماية عادي',
+    'رماية عادي': 'رماية عادي',
+    'رماية عاديه': 'رماية عادي',
+    'فول': 'فول صحيح',
+    'فول صحيح': 'فول صحيح',
+    'كسر فول': 'كسر فول',
+    'مواشي': 'مواشي تسمين',
+    'مواشي تسمين': 'مواشي تسمين',
+    'بسله': 'بسله',
+    'شعير': 'شعير',
+    'قمح': 'قمح',
+    'عويجه': 'عويجه',
+    'بياض': 'بياض',
+    'ناهي': 'ناهي',
+    'نامي': 'نامي',
+    'بادي': 'بادي',
+    'ذهبي': 'ذهبي',
+    'ردة': 'ردة',
+    'ابناء الشرقيه': 'ابناء الشرقيه',
+    'غله': 'قمح', // غله = قمح
+    'كسب': 'كسب', // handled specially
+    'كسب خشن': 'كسب خشن',
+    'كسب ناعم': 'كسب ناعم',
+    'دش ٥٠': 'دشيشه',
+    'دش ٢٥': 'دشيشه صغير',
+    'دشيشه خشنه': 'دشيشه',
+    'دشيشه وسط': 'دشيشه',
+    'دهبى': 'ذهبي',
+    'ذهبي ٢٥': 'ذهبي صغير',
+    'ذهبي ٥٠': 'ذهبي',
+    'بادي ٥٠': 'بادي',
+    'بادي ٢٥': 'بادي صغير',
+    'نامي ٥٠': 'نامي',
+    'نامي ٢٥': 'نامي صغير',
+    'ناهي ٥٠': 'ناهي',
+    'ناهي ٢٥': 'ناهي صغير',
+    'بياض ٥٠': 'بياض',
+    'بياض ٢٥': 'بياض صغير',
+    'ارنب تسمين': 'ارانب تسمين',
+    'مرضعات': 'ارانب مرضعات',
+    'صويا': 'صويا', // not in default but we keep
+    'كياوي': 'كياوي', // not in default
+  };
+
+  // ============================================================
+  // تهيئة
+  // ============================================================
   function initProducts() {
     products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
     products.forEach(p => {
@@ -524,11 +826,107 @@
     });
   }
 
-  // دالة إنشاء نص التقرير للواتساب
-  function generateWhatsAppMessage() {
-    let branchName = document.getElementById('branchNameInput').value.trim();
-    if (branchName === "") branchName = "فرع غير محدد";
+  // ============================================================
+  // أدوات مساعدة
+  // ============================================================
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m));
+  }
+
+  function showToast(msg, duration = 3000) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timeout);
+    t._timeout = setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  function toEnglishNumber(str) {
+    return str.replace(/[٠-٩]/g, d => String.fromCharCode(d.charCodeAt(0) - 1632));
+  }
+
+  function parseNumber(str) {
+    if (!str) return 0;
+    // replace / with . first
+    let cleaned = str.replace(/\//g, '.');
+    cleaned = toEnglishNumber(cleaned).replace(/[^0-9.]/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function normalizeText(text) {
+    return text.toLowerCase()
+      .replace(/[ًٌٍَُِّْ]/g, '')
+      .replace(/[ة]/g, 'ه')
+      .replace(/[أإآ]/g, 'ا')
+      .replace(/[ى]/g, 'ي')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // ============================================================
+  // خوارزمية المطابقة المرنة (Fuzzy Matching) المحسّنة
+  // ============================================================
+  function getFuzzyMatchScore(text1, text2) {
+    const n1 = normalizeText(text1);
+    const n2 = normalizeText(text2);
+    if (n1 === n2) return 1.0;
+    if (n1.includes(n2) || n2.includes(n1)) return 0.9;
     
+    const words1 = n1.split(' ');
+    const words2 = n2.split(' ');
+    let bestScore = 0;
+    
+    for (const w1 of words1) {
+      if (w1.length < 2) continue;
+      for (const w2 of words2) {
+        if (w2.length < 2) continue;
+        if (w1 === w2) return 0.95;
+        if (w1.includes(w2) || w2.includes(w1)) {
+          const ratio = Math.min(w1.length, w2.length) / Math.max(w1.length, w2.length);
+          if (ratio > bestScore) bestScore = ratio * 0.8;
+        }
+      }
+    }
+    return bestScore;
+  }
+
+  function findBestMatchProduct(searchName, threshold = 0.25) {
+    // أولاً: تطبيق المرادفات
+    let synonymKey = normalizeText(searchName);
+    let resolvedName = searchName;
+    for (const [key, value] of Object.entries(SYNONYM_MAP)) {
+      if (synonymKey.includes(normalizeText(key))) {
+        resolvedName = value;
+        break;
+      }
+    }
+    
+    let bestMatch = null;
+    let bestScore = 0;
+    const searchNorm = normalizeText(resolvedName);
+    
+    for (const product of products) {
+      const productNorm = normalizeText(product.name);
+      // تطابق تام مع المرادفات
+      if (searchNorm === productNorm) {
+        return product;
+      }
+      const score = getFuzzyMatchScore(resolvedName, product.name);
+      if (score > bestScore && score >= threshold) {
+        bestScore = score;
+        bestMatch = product;
+      }
+    }
+    return bestMatch;
+  }
+
+  // ============================================================
+  // توليد رسالة الواتساب (نفس الكود السابق)
+  // ============================================================
+  function generateWhatsAppMessage() {
+    let branchName = document.getElementById('branchNameInput').value.trim() || 'فرع غير محدد';
     const now = new Date();
     const dateStr = `${now.toLocaleDateString('ar-EG')} ${now.toLocaleTimeString('ar-EG')}`;
     
@@ -537,7 +935,6 @@
     message += `🕒 *التاريخ والوقت:* ${dateStr}\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
     
-    // تصفية المنتجات التي لها كميات فقط
     const nonZeroProducts = products.filter(p => (p.bags && p.bags > 0) || (p.looseKg && p.looseKg > 0));
     
     if (nonZeroProducts.length === 0) {
@@ -558,7 +955,6 @@
       });
     }
     
-    // إضافة إجمالي عام لكل الكميات
     let totalAllKg = 0;
     let totalAllDecimalBags = 0;
     products.forEach(p => {
@@ -567,25 +963,24 @@
       if(p.bagWeight > 0) totalAllDecimalBags += totalKg / p.bagWeight;
     });
     message += `📌 *المجموع الكلي:* ${Math.round(totalAllKg * 10) / 10} كجم\n`;
-    message += `📌 *إجمالي الشكاير  العشرية:* ${(totalAllDecimalBags % 1 === 0) ? totalAllDecimalBags.toFixed(0) : totalAllDecimalBags.toFixed(2)} شكاره\n`;
+    message += `📌 *إجمالي الشكاير العشرية:* ${(totalAllDecimalBags % 1 === 0) ? totalAllDecimalBags.toFixed(0) : totalAllDecimalBags.toFixed(2)} شكاره\n`;
     message += `\n✅ تم الإرسال عبر سيرفر *ᗩᘔIᘔ Eᗰᗩᗪ*`;
     
     return encodeURIComponent(message);
   }
 
-  // وظيفة إرسال الواتساب
   function sendWhatsAppReport() {
-    const phoneNumber = "+201015913800";
+    const phone = document.getElementById('whatsappNumberInput').value.trim() || whatsappNumber;
     const message = generateWhatsAppMessage();
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    window.open(`https://wa.me/${phone.replace(/[^0-9+]/g, '')}?text=${message}`, '_blank');
   }
 
-  // تحديث واجهة منتج واحد
+  // ============================================================
+  // تحديث واجهة المنتج (نفس الكود السابق)
+  // ============================================================
   function updateSingleProductUI(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
-    
     const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
     if (!card) return;
     
@@ -598,41 +993,31 @@
     
     const bagsInput = card.querySelector('.bags-input');
     const looseInput = card.querySelector('.loose-input');
-    
-    if (bagsInput && document.activeElement !== bagsInput) {
-      bagsInput.value = bags;
-    }
-    if (looseInput && document.activeElement !== looseInput) {
-      looseInput.value = looseKg;
-    }
+    if (bagsInput && document.activeElement !== bagsInput) bagsInput.value = bags;
+    if (looseInput && document.activeElement !== looseInput) looseInput.value = looseKg;
     
     const totalKgSpan = card.querySelector('.result-total-kg');
     const decimalBagsSpan = card.querySelector('.result-decimal-bags');
+    const totalCollectSpan = card.querySelector('.result-total-collect');
     
     if (totalKgSpan) totalKgSpan.textContent = `${Math.round(totalKg * 10) / 10} كجم`;
     if (decimalBagsSpan) decimalBagsSpan.textContent = `${decimalBagsFormatted} شكاره`;
+    if (totalCollectSpan) totalCollectSpan.textContent = `${Math.round(totalKg * 10) / 10} كجم`;
   }
 
-  // تحديث كمية المنتج
   function updateProductQuantity(productId, field, value) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
-    
-    let num = parseFloat(value);
-    if (isNaN(num)) num = 0;
+    let num = parseNumber(value);
     if (num < 0) num = 0;
-    
-    if (field === 'bags') {
-      product.bags = num;
-    } else if (field === 'loose') {
-      product.looseKg = num;
-    }
-    
+    if (field === 'bags') product.bags = num;
+    else if (field === 'loose') product.looseKg = num;
     updateSingleProductUI(productId);
   }
 
-  let currentEditProductId = null;
-
+  // ============================================================
+  // إدارة المنتجات (نفس الكود السابق)
+  // ============================================================
   function openAddModal() {
     currentEditProductId = null;
     document.getElementById('modalTitle').innerText = '➕ إضافة علف جديد';
@@ -653,7 +1038,7 @@
 
   function deleteProductById(productId) {
     if (products.length <= 1) {
-      alert("لا يمكن حذف آخر منتج، يمكنك تعديله بدلاً من ذلك.");
+      showToast("⚠️ لا يمكن حذف آخر منتج، يمكنك تعديله بدلاً من ذلك.");
       return;
     }
     products = products.filter(p => p.id !== productId);
@@ -662,17 +1047,9 @@
 
   function saveProductFromModal() {
     let name = document.getElementById('productNameInput').value.trim();
-    let weightRaw = document.getElementById('productWeightInput').value;
-    let weight = parseFloat(weightRaw);
-    
-    if (!name || name === "") {
-      alert("الرجاء إدخال اسم العلف");
-      return;
-    }
-    if (isNaN(weight) || weight <= 0) {
-      alert("وزن الشكاره يجب أن يكون رقماً موجباً");
-      return;
-    }
+    let weight = parseNumber(document.getElementById('productWeightInput').value);
+    if (!name) { showToast("⚠️ الرجاء إدخال اسم العلف"); return; }
+    if (isNaN(weight) || weight <= 0) { showToast("⚠️ وزن الشكاره يجب أن يكون رقماً موجباً"); return; }
     
     if (currentEditProductId) {
       const index = products.findIndex(p => p.id === currentEditProductId);
@@ -682,13 +1059,9 @@
         renderProducts();
       }
     } else {
-      const newId = crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random();
       products.push({
-        id: newId,
-        name: name,
-        bagWeight: weight,
-        bags: 0,
-        looseKg: 0
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random(),
+        name, bagWeight: weight, bags: 0, looseKg: 0
       });
       renderProducts();
     }
@@ -701,30 +1074,337 @@
   }
 
   function resetAllQuantities() {
-    products.forEach(p => {
-      p.bags = 0;
-      p.looseKg = 0;
-    });
+    products.forEach(p => { p.bags = 0; p.looseKg = 0; });
     renderProducts();
   }
 
-  function handleNumericInput(e, productId, field) {
-    let rawValue = e.target.value;
-    let converted = rawValue.replace(/[٠-٩]/g, function(d) {
-      return String.fromCharCode(d.charCodeAt(0) - 1632);
-    });
-    let filtered = converted.replace(/[^0-9.]/g, '');
-    let parts = filtered.split('.');
-    if (parts.length > 2) {
-      filtered = parts[0] + '.' + parts.slice(1).join('');
+  // ============================================================
+  // نظام الاستيراد الجديد الاحترافي
+  // ============================================================
+  let importReviewData = []; // تخزين بيانات المراجعة
+  let importStats = { totalLines: 0, matched: 0, newProducts: 0, unmatched: 0, unmatchedLines: [] };
+
+  // دالة لتطبيق المرادفات على اسم المنتج
+  function resolveSynonym(name) {
+    const norm = normalizeText(name);
+    for (const [key, value] of Object.entries(SYNONYM_MAP)) {
+      if (norm.includes(normalizeText(key))) {
+        return value;
+      }
     }
-    
-    if (filtered !== e.target.value) {
-      e.target.value = filtered;
-    }
-    
-    updateProductQuantity(productId, field, filtered);
+    return name;
   }
+
+  // معالجة سطر واحد وإرجاع كائن { product, quantity, isBag, weight, rawName, matched, newProduct }
+  function parseLine(line, isInventoryMode) {
+    const trimmed = line.trim();
+    if (!trimmed) return null;
+    
+    // استخراج جميع الأرقام (عربية وإنجليزية مع /)
+    let numbers = [];
+    let match;
+    // دعم الأرقام مع / مثل 63/810
+    const numRegex = /[\d٠-٩.]+(?:\/[\d٠-٩.]+)?/g;
+    while ((match = numRegex.exec(trimmed)) !== null) {
+      numbers.push(match[0]);
+    }
+    
+    if (numbers.length === 0) return null;
+    
+    // تحويل الأرقام إلى أرقام إنجليزية
+    const parsedNumbers = numbers.map(n => parseNumber(n));
+    
+    // استخراج اسم المنتج: إزالة جميع الأرقام
+    let productName = trimmed;
+    numbers.forEach(num => {
+      productName = productName.replace(num, '');
+    });
+    // إزالة الكلمات الدالة
+    productName = productName.replace(/كجم|شكاره|شكاير|شك|جرد|فارط|سوبر|عادي|صغير|كيلو|كجم/g, '');
+    productName = productName.trim();
+    if (!productName) return null;
+    
+    // تطبيق المرادفات
+    productName = resolveSynonym(productName);
+    
+    // تحديد الوزن المخصص (إذا وجد رقم ثاني)
+    let customWeight = null;
+    let mainNumber = parsedNumbers[0];
+    if (parsedNumbers.length >= 2) {
+      const potentialWeight = parsedNumbers[parsedNumbers.length - 1];
+      if (potentialWeight >= 10 && potentialWeight <= 60) {
+        customWeight = potentialWeight;
+        // إذا كان هناك رقمين، mainNumber هو الأول
+      }
+    }
+    
+    // معالجة خاصة لـ "كسب" بدون تحديد نوع
+    let isKasp = normalizeText(productName).includes('كسب') && !normalizeText(productName).includes('خشن') && !normalizeText(productName).includes('ناعم');
+    
+    // البحث عن المنتج
+    let foundProduct = findBestMatchProduct(productName);
+    let matched = false;
+    let newProduct = false;
+    let productRef = null;
+    
+    if (foundProduct) {
+      matched = true;
+      productRef = foundProduct;
+      // إذا كان المنتج موجود، نضيف الكمية
+    } else {
+      // إذا لم يتم العثور، سننشئ منتجاً جديداً
+      newProduct = true;
+      // نحدد الوزن المناسب
+      let weight = customWeight || (mainNumber > 20 ? 50 : 25);
+      if (isKasp) {
+        // سيتم طلب اختيار الوزن من المستخدم لاحقاً
+        weight = null; // سنطلب من المستخدم
+      }
+      // سننشئ المنتج مؤقتاً
+      productRef = {
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random(),
+        name: productName,
+        bagWeight: weight || 25,
+        bags: 0,
+        looseKg: 0
+      };
+    }
+    
+    // تحديد نوع الكمية (شكاير أم كجم)
+    let isBag = false;
+    if (isInventoryMode) {
+      isBag = true;
+    } else {
+      const hasDecimal = numbers[0].includes('.') || numbers[0].includes('٫') || numbers[0].includes('/');
+      // إذا كان الرقم كبيراً (> 20) أو يحتوي على فاصلة عشرية -> كجم
+      if (hasDecimal || mainNumber > 20) {
+        isBag = false;
+      } else {
+        isBag = true;
+      }
+    }
+    
+    // إذا كان customWeight موجود، نستخدمه
+    if (customWeight) {
+      isBag = true; // وجود وزن يعني أنها شكاير
+    }
+    
+    return {
+      product: productRef,
+      quantity: mainNumber,
+      isBag: isBag,
+      weight: customWeight || productRef.bagWeight,
+      rawName: productName,
+      matched: matched,
+      newProduct: newProduct,
+      isKasp: isKasp,
+      originalLine: trimmed
+    };
+  }
+
+  // دالة معالجة النص الكامل
+  function processImportText(text) {
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    let isInventoryMode = text.includes('جرد') || text.includes('شكائر') || text.includes('شكاير');
+    
+    let results = [];
+    let unmatchedLines = [];
+    let newProductsCount = 0;
+    let matchedCount = 0;
+    
+    // إذا كان وضع الجرد، نبدأ من بعد كلمة جرد
+    let startIndex = 0;
+    if (isInventoryMode) {
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('جرد') || lines[i].includes('شكائر') || lines[i].includes('شكاير')) {
+          startIndex = i + 1;
+          break;
+        }
+      }
+    }
+    
+    for (let i = startIndex; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line) continue;
+      
+      // تجاهل الأسطر التي تحتوي على كلمات دالة فقط
+      if (/^(جرد|شكائر|شكاير|كجم|كيلو)$/.test(line)) continue;
+      
+      const parsed = parseLine(line, isInventoryMode);
+      if (parsed) {
+        results.push(parsed);
+        if (parsed.matched) matchedCount++;
+        if (parsed.newProduct) newProductsCount++;
+      } else {
+        unmatchedLines.push(line);
+      }
+    }
+    
+    return {
+      results,
+      unmatchedLines,
+      stats: {
+        totalLines: lines.length - startIndex,
+        matched: matchedCount,
+        newProducts: newProductsCount,
+        unmatched: unmatchedLines.length
+      }
+    };
+  }
+
+  // عرض مراجعة الاستيراد
+  function showImportReview(importResult) {
+    const container = document.getElementById('importReviewContainer');
+    container.style.display = 'block';
+    
+    const wrapper = document.getElementById('reviewTableWrapper');
+    let html = `<table class="review-table">
+      <thead><tr><th>#</th><th>اسم المنتج</th><th>الوزن</th><th>نوع الإدخال</th><th>الكمية</th><th>الحالة</th></tr></thead><tbody>`;
+    
+    let idx = 1;
+    importResult.results.forEach(item => {
+      const status = item.matched ? '✅ متطابق' : (item.newProduct ? '🆕 منتج جديد' : '❓ غير معروف');
+      const statusClass = item.matched ? 'matched' : (item.newProduct ? 'new-product' : 'unmatched');
+      const typeText = item.isBag ? '📦 شكاير' : '⚖️ كجم';
+      html += `<tr>
+        <td>${idx++}</td>
+        <td>${escapeHtml(item.product.name)}</td>
+        <td>${item.weight || 'غير محدد'}</td>
+        <td>${typeText}</td>
+        <td>${item.quantity}</td>
+        <td class="${statusClass}">${status}</td>
+      </tr>`;
+    });
+    
+    if (importResult.unmatchedLines.length > 0) {
+      html += `<tr><td colspan="6" style="color:#f87171; text-align:right;">⚠️ لم يتم التعرف على السطور التالية:</td></tr>`;
+      importResult.unmatchedLines.forEach(line => {
+        html += `<tr><td colspan="6" style="color:#f87171; text-align:right; font-size:0.8rem;">${escapeHtml(line)}</td></tr>`;
+      });
+    }
+    
+    html += `</tbody></table>`;
+    wrapper.innerHTML = html;
+    
+    // تقرير
+    const stats = importResult.stats;
+    const report = document.getElementById('importReport');
+    report.innerHTML = `
+      📊 <strong>تقرير الاستيراد:</strong> تم استيراد ${stats.totalLines} سطراً.
+      ✅ تم التعرف على ${stats.matched} منتجاً.
+      🆕 تم إنشاء ${stats.newProducts} منتجاً جديداً.
+      ⚠️ لم يتم التعرف على ${stats.unmatched} سطراً.
+    `;
+    
+    // حفظ البيانات للموافقة
+    importReviewData = importResult.results;
+    importStats = importResult.stats;
+    importStats.unmatchedLines = importResult.unmatchedLines;
+    
+    // إظهار أزرار الاعتماد
+    document.getElementById('importConfirmBtn').style.display = 'inline-block';
+    document.getElementById('importRejectBtn').style.display = 'inline-block';
+  }
+
+  // تنفيذ الاستيراد بعد الموافقة
+  function confirmImport() {
+    let newProductsAdded = 0;
+    let itemsUpdated = 0;
+    
+    importReviewData.forEach(item => {
+      // البحث عن المنتج في القائمة الحالية
+      let existing = products.find(p => p.name === item.product.name && p.bagWeight === (item.weight || p.bagWeight));
+      
+      if (!existing) {
+        // إذا كان "كسب" بدون نوع، نطلب من المستخدم
+        if (item.isKasp) {
+          // نفتح نافذة اختيار الوزن
+          showWeightChoiceModal(item);
+          return; // سنتعامل معها بشكل منفصل
+        }
+        // إنشاء منتج جديد
+        const newProduct = {
+          id: crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random(),
+          name: item.product.name,
+          bagWeight: item.weight || 25,
+          bags: 0,
+          looseKg: 0
+        };
+        products.push(newProduct);
+        existing = newProduct;
+        newProductsAdded++;
+      }
+      
+      // إضافة الكمية
+      if (item.isBag) {
+        existing.bags = (existing.bags || 0) + Math.round(item.quantity);
+      } else {
+        existing.looseKg = (existing.looseKg || 0) + item.quantity;
+      }
+      itemsUpdated++;
+    });
+    
+    // معالجة حالات "كسب" التي تم تأجيلها
+    // (سيتم التعامل معها عبر weightChoiceModal)
+    
+    renderProducts();
+    closeImportModal();
+    showToast(`✅ تم الاستيراد بنجاح! (${itemsUpdated} تحديث، ${newProductsAdded} منتج جديد)`);
+    
+    // إعادة تعيين بيانات المراجعة
+    importReviewData = [];
+  }
+
+  // نافذة اختيار وزن الكسب
+  let pendingKaspItem = null;
+  function showWeightChoiceModal(item) {
+    pendingKaspItem = item;
+    document.getElementById('weightChoiceModal').style.display = 'flex';
+  }
+
+  function handleWeightChoice(weight) {
+    if (!pendingKaspItem) return;
+    const item = pendingKaspItem;
+    // إنشاء منتج بالوزن المختار
+    const newProduct = {
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random(),
+      name: weight === 50 ? 'كسب خشن' : 'كسب ناعم',
+      bagWeight: weight,
+      bags: 0,
+      looseKg: 0
+    };
+    products.push(newProduct);
+    // إضافة الكمية
+    if (item.isBag) {
+      newProduct.bags = Math.round(item.quantity);
+    } else {
+      newProduct.looseKg = item.quantity;
+    }
+    pendingKaspItem = null;
+    document.getElementById('weightChoiceModal').style.display = 'none';
+    renderProducts();
+    showToast(`✅ تم إضافة ${newProduct.name} بنجاح`);
+  }
+
+  // دوال التحكم في نافذة الاستيراد
+  function openImportModal() {
+    document.getElementById('importTextArea').value = '';
+    document.getElementById('importReviewContainer').style.display = 'none';
+    document.getElementById('importReport').innerHTML = '';
+    document.getElementById('importConfirmBtn').style.display = 'none';
+    document.getElementById('importRejectBtn').style.display = 'none';
+    document.getElementById('importModal').style.display = 'flex';
+  }
+
+  function closeImportModal() {
+    document.getElementById('importModal').style.display = 'none';
+    importReviewData = [];
+  }
+
+  // ============================================================
+  // عرض المنتجات (نفس الكود السابق)
+  // ============================================================
+  let dragState = { draggedId: null, targetId: null };
 
   function renderProducts() {
     const container = document.getElementById('productsContainer');
@@ -748,13 +1428,13 @@
       const decimalBagsFormatted = decimalBags % 1 === 0 ? decimalBags.toFixed(0) : decimalBags.toFixed(2);
       
       return `
-        <div class="product-card" data-product-id="${product.id}">
+        <div class="product-card" data-product-id="${product.id}" draggable="true">
           <div class="card-header">
             <span class="product-name">${escapeHtml(product.name)}</span>
             <span class="bag-weight-badge">⚖️ الشكاره: ${bagWeight} كجم</span>
           </div>
           <div class="input-group">
-            <label>📦 عدد الشكاير </label>
+            <label>📦 عدد الشكاير</label>
             <input type="text" inputmode="decimal" value="${bags}" class="number-input bags-input" data-id="${product.id}" data-field="bags" placeholder="0" autocomplete="off">
           </div>
           <div class="input-group">
@@ -764,14 +1444,19 @@
           <div class="results">
             <div class="result-item">
               <span class="result-label">📊 إجمالي كجم</span>
-              <span class="result-value result-total-kg">${Math.round(totalKg * 10) / 10} كجم</span>
+              <span class="result-value total-kg result-total-kg">${Math.round(totalKg * 10) / 10} كجم</span>
             </div>
             <div class="result-item">
               <span class="result-label">🛍️ شكاير عشرية</span>
               <span class="result-value decimal-bags result-decimal-bags">${decimalBagsFormatted} شكاره</span>
             </div>
+            <div class="result-item">
+              <span class="result-label">🧮 كجم (مجمع)</span>
+              <span class="result-value total-kg result-total-collect">${Math.round(totalKg * 10) / 10} كجم</span>
+            </div>
           </div>
           <div class="card-actions">
+            <span class="drag-handle" title="اسحب لإعادة الترتيب">⠿</span>
             <button class="icon-btn edit-btn" data-action="edit" data-id="${product.id}">✏️ تعديل</button>
             <button class="icon-btn delete-btn" data-action="delete" data-id="${product.id}">🗑️ حذف</button>
           </div>
@@ -780,18 +1465,17 @@
     }).join('');
     
     document.querySelectorAll('.bags-input').forEach(input => {
-      const productId = input.getAttribute('data-id');
-      input.removeEventListener('input', window[`handler_${productId}_bags`]);
-      const handler = (e) => handleNumericInput(e, productId, 'bags');
-      window[`handler_${productId}_bags`] = handler;
+      const id = input.dataset.id;
+      input.removeEventListener('input', window[`handler_${id}_bags`]);
+      const handler = (e) => handleNumericInput(e, id, 'bags');
+      window[`handler_${id}_bags`] = handler;
       input.addEventListener('input', handler);
     });
-    
     document.querySelectorAll('.loose-input').forEach(input => {
-      const productId = input.getAttribute('data-id');
-      input.removeEventListener('input', window[`handler_${productId}_loose`]);
-      const handler = (e) => handleNumericInput(e, productId, 'loose');
-      window[`handler_${productId}_loose`] = handler;
+      const id = input.dataset.id;
+      input.removeEventListener('input', window[`handler_${id}_loose`]);
+      const handler = (e) => handleNumericInput(e, id, 'loose');
+      window[`handler_${id}_loose`] = handler;
       input.addEventListener('input', handler);
     });
     
@@ -799,69 +1483,81 @@
       btn.removeEventListener('click', handleEditClick);
       btn.addEventListener('click', handleEditClick);
     });
-    
     document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.removeEventListener('click', handleDeleteClick);
       btn.addEventListener('click', handleDeleteClick);
     });
+    
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.removeEventListener('dragstart', handleDragStart);
+      card.removeEventListener('dragend', handleDragEnd);
+      card.removeEventListener('dragover', handleDragOver);
+      card.removeEventListener('dragenter', handleDragEnter);
+      card.removeEventListener('dragleave', handleDragLeave);
+      card.removeEventListener('drop', handleDrop);
+      
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      card.addEventListener('dragover', handleDragOver);
+      card.addEventListener('dragenter', handleDragEnter);
+      card.addEventListener('dragleave', handleDragLeave);
+      card.addEventListener('drop', handleDrop);
+    });
   }
-  
-  function handleEditClick(e) {
-    const id = e.currentTarget.getAttribute('data-id');
-    openEditModal(id);
+
+  function handleNumericInput(e, productId, field) {
+    let raw = e.target.value;
+    let filtered = toEnglishNumber(raw).replace(/[^0-9.]/g, '');
+    let parts = filtered.split('.');
+    if (parts.length > 2) filtered = parts[0] + '.' + parts.slice(1).join('');
+    if (filtered !== e.target.value) e.target.value = filtered;
+    updateProductQuantity(productId, field, filtered);
   }
-  
+
+  function handleEditClick(e) { openEditModal(e.currentTarget.dataset.id); }
   function handleDeleteClick(e) {
-    const id = e.currentTarget.getAttribute('data-id');
-    if (confirm("هل أنت متأكد من حذف هذا العلف؟")) {
-      deleteProductById(id);
+    if (confirm("هل أنت متأكد من حذف هذا العلف؟")) deleteProductById(e.currentTarget.dataset.id);
+  }
+
+  // ============================================================
+  // أحداث السحب والإفلات (نفس الكود السابق)
+  // ============================================================
+  function handleDragStart(e) {
+    const card = e.target.closest('.product-card');
+    if (!card) return;
+    dragState.draggedId = card.dataset.productId;
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', dragState.draggedId);
+  }
+
+  function handleDragEnd(e) {
+    const card = e.target.closest('.product-card');
+    if (card) card.classList.remove('dragging');
+    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('drag-over'));
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function handleDragEnter(e) {
+    e.preventDefault();
+    const target = e.target.closest('.product-card');
+    if (target && target.dataset.productId !== dragState.draggedId) {
+      target.classList.add('drag-over');
     }
   }
-  
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
+
+  function handleDragLeave(e) {
+    const target = e.target.closest('.product-card');
+    if (target) target.classList.remove('drag-over');
   }
-  
-  function initSplash() {
-    const splashDiv = document.getElementById('splashScreen');
-    const closeBtn = document.getElementById('closeSplashBtn');
-    if (localStorage.getItem('splash_seen') === 'true') {
-      splashDiv.classList.add('hidden');
-    } else {
-      splashDiv.classList.remove('hidden');
-      closeBtn.addEventListener('click', () => {
-        splashDiv.classList.add('hidden');
-        localStorage.setItem('splash_seen', 'true');
-      });
-    }
-  }
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    initProducts();      // تهيئة المنتجات بدون localStorage
-    renderProducts();
-    initSplash();
-    
-    document.getElementById('addProductBtn').addEventListener('click', openAddModal);
-    document.getElementById('resetQuantitiesBtn').addEventListener('click', () => {
-      if(confirm("إعادة تعيين جميع الكميات إلى صفر؟")) {
-        resetAllQuantities();
-      }
-    });
-    document.getElementById('modalSaveBtn').addEventListener('click', saveProductFromModal);
-    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
-    document.getElementById('searchInput').addEventListener('input', () => renderProducts());
-    document.getElementById('sendWhatsAppBtn').addEventListener('click', sendWhatsAppReport);
-    
-    window.addEventListener('click', (e) => {
-      if (e.target === document.getElementById('productModal')) closeModal();
-    });
-  });
-</script>
-</body>
-</html>
+
+  function handleDrop(e) {
+    e.preventDefault();
+    const target = e.target.closest('.product-card');
+    if (!target) return;
+    const targetId = target.dataset.productId;
+    const draggedId =
