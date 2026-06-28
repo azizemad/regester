@@ -1560,4 +1560,109 @@
     const target = e.target.closest('.product-card');
     if (!target) return;
     const targetId = target.dataset.productId;
-    const draggedId =
+    const draggedId = dragState.draggedId;
+    if (!draggedId || draggedId === targetId) return;
+    
+    const draggedIndex = products.findIndex(p => p.id === draggedId);
+    const targetIndex = products.findIndex(p => p.id === targetId);
+    if (draggedIndex === -1 || targetIndex === -1) return;
+    
+    const [removed] = products.splice(draggedIndex, 1);
+    products.splice(targetIndex, 0, removed);
+    
+    renderProducts();
+    showToast('✅ تم إعادة ترتيب المنتجات');
+  }
+
+  // ============================================================
+  // البداية
+  // ============================================================
+  function initSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (localStorage.getItem('splash_seen') === 'true') {
+      splash.classList.add('hidden');
+    } else {
+      splash.classList.remove('hidden');
+      document.getElementById('closeSplashBtn').addEventListener('click', () => {
+        splash.classList.add('hidden');
+        localStorage.setItem('splash_seen', 'true');
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initProducts();
+    renderProducts();
+    initSplash();
+    
+    const savedWa = localStorage.getItem('whatsapp_number');
+    if (savedWa) {
+      whatsappNumber = savedWa;
+      document.getElementById('whatsappNumberInput').value = savedWa;
+    }
+    
+    document.getElementById('addProductBtn').addEventListener('click', openAddModal);
+    document.getElementById('resetQuantitiesBtn').addEventListener('click', () => {
+      if (confirm("إعادة تعيين جميع الكميات إلى صفر؟")) resetAllQuantities();
+    });
+    document.getElementById('modalSaveBtn').addEventListener('click', saveProductFromModal);
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    document.getElementById('searchInput').addEventListener('input', renderProducts);
+    document.getElementById('sendWhatsAppBtn').addEventListener('click', sendWhatsAppReport);
+    
+    // أحداث الاستيراد الجديدة
+    document.getElementById('importFromTextBtn').addEventListener('click', openImportModal);
+    document.getElementById('importReviewBtn').addEventListener('click', () => {
+      const text = document.getElementById('importTextArea').value;
+      if (!text.trim()) {
+        showToast("⚠️ الرجاء لصق النص أولاً.");
+        return;
+      }
+      const result = processImportText(text);
+      showImportReview(result);
+    });
+    document.getElementById('importConfirmBtn').addEventListener('click', confirmImport);
+    document.getElementById('importRejectBtn').addEventListener('click', () => {
+      document.getElementById('importReviewContainer').style.display = 'none';
+      document.getElementById('importReport').innerHTML = '';
+      importReviewData = [];
+      showToast("❌ تم إلغاء الاستيراد");
+    });
+    document.getElementById('importCancelBtn').addEventListener('click', closeImportModal);
+    
+    // أحداث اختيار وزن الكسب
+    document.querySelectorAll('#weightChoiceModal .btn-primary[data-weight]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const weight = parseInt(btn.dataset.weight);
+        handleWeightChoice(weight);
+      });
+    });
+    document.getElementById('weightChoiceCancel').addEventListener('click', () => {
+      document.getElementById('weightChoiceModal').style.display = 'none';
+      pendingKaspItem = null;
+      showToast("❌ تم إلغاء إضافة كسب");
+    });
+    
+    document.getElementById('changeWaNumberBtn').addEventListener('click', () => {
+      const newNum = document.getElementById('whatsappNumberInput').value.trim();
+      if (newNum && newNum.length > 5) {
+        whatsappNumber = newNum;
+        localStorage.setItem('whatsapp_number', newNum);
+        showToast('✅ تم تغيير رقم الواتساب بنجاح');
+      } else {
+        showToast('⚠️ الرجاء إدخال رقم صحيح');
+      }
+    });
+    
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('productModal')) closeModal();
+      if (e.target === document.getElementById('importModal')) closeImportModal();
+      if (e.target === document.getElementById('weightChoiceModal')) {
+        document.getElementById('weightChoiceModal').style.display = 'none';
+        pendingKaspItem = null;
+      }
+    });
+  });
+</script>
+</body>
+</html>
